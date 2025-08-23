@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Móveis Artesanais - Metalon & Madeira</title>
+    <style>
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Modal Header */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 2rem 1rem 2rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .modal-header h2 {
+            color: var(--rich-black);
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: var(--light-gray);
+            color: var(--rich-black);
+        }
+
+        /* Modal Body */
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Modal Image */
+        .modal-image-container {
+            position: relative;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Modal Info */
+        .modal-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .modal-section {
+            padding: 1.5rem;
+            background: var(--light-gray);
+            border-radius: 15px;
+            border-left: 4px solid var(--vivid-yellow);
+        }
+
+        .modal-section h3 {
+            color: var(--rich-black);
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .modal-section p {
+            color: #555;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .preco-destaque {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--vivid-yellow);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal Actions */
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-orcamento, .btn-carrinho {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-orcamento {
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+        }
+
+        .btn-orcamento:hover {
+            background: #e6d014;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(254, 231, 21, 0.3);
+        }
+
+        .btn-carrinho {
+            background: var(--rich-black);
+            color: var(--white);
+        }
+
+        .btn-carrinho:hover {
+            background: #2a2a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+            }
+
+            .modal-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .modal-image {
+                height: 250px;
+            }
+
+            .modal-header {
+                padding: 1.5rem 1.5rem 1rem 1.5rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
+            .modal-header h2 {
+                font-size: 1.4rem;
+            }
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rich-black: #101820;
+            --vivid-yellow: #FEE715;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --success-green: #28a745;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--rich-black);
+            background-color: var(--white);
+        }
+
+        /* Header */
+        .header {
+            background: var(--rich-black);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--vivid-yellow);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--vivid-yellow);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .whatsapp-btn {
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(254, 231, 21, 0.3);
+        }
+
+        .carrinho-btn {
+            background: var(--white);
+            color: var(--rich-black);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .carrinho-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--rich-black) 0%, #2a2a2a 100%);
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="%23FEE715" opacity="0.1"/><circle cx="30" cy="5" r="0.3" fill="%23FEE715" opacity="0.1"/><circle cx="70" cy="15" r="0.4" fill="%23FEE715" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .hero .highlight {
+            color: var(--vivid-yellow);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(254, 231, 21, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 1rem 2rem;
+            border: 2px solid var(--white);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--rich-black);
+        }
+
+        /* Seções */
+        .section {
+            padding: 80px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--rich-black);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--vivid-yellow);
+            border-radius: 2px;
+        }
+
+        /* ===== MÓVEIS GRID - VERSÃO ATUALIZADA ===== */
+        .moveis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .movel-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .movel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        /* VERSÃO ATUALIZADA - Suporte a imagens e emojis */
+        .movel-image {
+            width: 100%;
+            height: 200px;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--rich-black);
+            overflow: hidden;
+            border-radius: 15px 15px 0 0;
+            position: relative;
+        }
+
+        /* Estilo para imagens reais */
+        .movel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            border-radius: 0;
+        }
+
+        /* Efeito hover nas imagens */
+        .movel-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Estilo para quando a imagem está carregando */
+        .movel-image.loading {
+            background: linear-gradient(90deg, var(--light-gray) 25%, #e0e0e0 50%, var(--light-gray) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Placeholder para quando não há imagem */
+        .movel-image.no-image {
+            background: var(--light-gray);
+            color: var(--rich-black);
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estilo para erro de imagem */
+        .movel-image.error {
+            background: #f8f8f8;
+            color: #999;
+            font-size: 2rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .movel-content {
+            padding: 1.5rem;
+        }
+
+        .movel-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--rich-black);
+        }
+
+        .movel-materials {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .movel-btn {
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .movel-btn:hover {
+            background: #e6d014;
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESTO DO CSS ORIGINAL ===== */
+        /* Materiais Section */
+        .materiais {
+            background: var(--light-gray);
+        }
+
+        .materiais-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .material-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .material-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--vivid-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+        }
+
+        /* Móveis Planejados */
+        .planejados {
+            background: var(--rich-black);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .planejados .section-title {
+            color: var(--white);
+        }
+
+        .processo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .processo-step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        /* Sobre Nós */
+        .sobre-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .sobre-image {
+            width: 100%;
+            height: 300px;
+            background: var(--light-gray);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--rich-black);
+        }
+
+        .sobre-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .diferenciais {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .diferenciais li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .diferenciais li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--vivid-yellow);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Localização */
+        .localizacao {
+            background: var(--light-gray);
+        }
+
+        .localizacao-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .mapa {
+            background: var(--rich-black);
+            height: 300px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2rem;
+        }
+
+        .info-contato {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .contato-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .contato-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--vivid-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--rich-black);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--vivid-yellow);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p, .footer-section a {
+            color: var(--white);
+            text-decoration: none;
+            line-height: 1.8;
+        }
+
+        .footer-section a:hover {
+            color: var(--vivid-yellow);
+        }
+
+        .copyright {
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+        }
+
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3); }
+            50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.6); }
+            100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .nav-actions {
+                gap: 0.5rem;
+            }
+
+            .whatsapp-btn, .carrinho-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sobre-grid,
+            .localizacao-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .moveis-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .mapa-clicavel {
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mapa-clicavel:hover {
+            background: linear-gradient(135deg, #1a1f2e 0%, #2a3040 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .mapa-clicavel:hover small {
+            opacity: 1 !important;
+            animation: pulse-text 1.5s infinite;
+        }
+
+        @keyframes pulse-text {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Efeito visual adicional */
+        .mapa-clicavel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(254, 231, 21, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .mapa-clicavel:hover::before {
+            left: 100%;
+        }
+        /* Carousel de Imagens - VERSÃO ATUALIZADA */
+        .image-carousel {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden; /* ← CRÍTICO: esconder overflow */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: var(--light-gray);
+        }
+
+        .carousel-container {
+            display: flex;
+            width: 100%; /* ← CORREÇÃO: sempre 100% */
+            height: 100%;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .carousel-image {
+            width: 100%; /* ← CORREÇÃO: cada imagem ocupa 100% do container visível */
+            height: 100%;
+            object-fit: contain;
+            flex-shrink: 0; /* ← CRÍTICO: impede que a imagem encolha */
+            flex-grow: 0;   /* ← CRÍTICO: impede que a imagem cresça */
+            cursor: grab;
+            user-select: none;
+            background: var(--white);
+            display: block;
+        }
+        .carousel-image:active {
+            cursor: grabbing;
+        }
+
+        /* Botões de Navegação */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-prev {
+            left: 15px;
+        }
+
+        .carousel-next {
+            right: 15px;
+        }
+
+        /* Indicadores de Posição */
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: var(--vivid-yellow);
+            transform: scale(1.2);
+        }
+
+        .indicator:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Thumbnails */
+        .thumbnails-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            overflow-x: auto;
+            padding: 5px;
+        }
+
+        .thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover; /* Thumbnails podem usar cover */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.05);
+            border-color: var(--vivid-yellow);
+        }
+
+        .thumbnail.active {
+            border-color: var(--vivid-yellow);
+            transform: scale(1.1);
+        }
+
+        /* Loading State */
+        .carousel-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            background: var(--light-gray);
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        /* Touch/Swipe Support */
+        .carousel-container.dragging {
+            transition: none;
+        }
+
+        /* Responsive para Carousel */
+        @media (max-width: 768px) {
+            .image-carousel {
+                height: 300px; /* Um pouco maior no mobile */
+            }
+
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .carousel-prev {
+                left: 10px;
+            }
+
+            .carousel-next {
+                right: 10px;
+            }
+
+            .thumbnail {
+                width: 50px;
+                height: 50px;
+            }
+
+            .thumbnails-container {
+                gap: 5px;
+            }
+
+            .carousel-indicators {
+                bottom: 10px;
+            }
+
+            .indicator {
+                width: 10px;
+                height: 10px;
+            }
+        }
+        .movel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            border-radius: 0;
+
+            /* ✅ Otimizações de performance */
+            loading: lazy;                /* Carregamento lazy */
+            will-change: transform;       /* Otimiza animações */
+            image-rendering: optimizeQuality; /* Melhor qualidade */
+        }
+
+        /* Loading skeleton enquanto carrega */
+        .movel-image.loading {
+            background: linear-gradient(90deg, var(--light-gray) 25%, #e0e0e0 50%, var(--light-gray) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        /* Placeholder otimizado */
+        .movel-image.no-image {
+            background: var(--light-gray);
+            color: var(--rich-black);
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Cache de imagens melhorado */
+        .movel-card {
+            contain: layout style;  /* Otimiza renderização */
+        }
+
+        /* Toast para notificações */
+        .toast-landing {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--success-green);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast-landing.show {
+            transform: translateX(0);
+        }
+
+        .toast-landing.error {
+            background: #dc3545;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="modalDetalhes" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitulo">Nome do Móvel</h2>
+                <button class="modal-close" onclick="fecharModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-grid">
+                    <!-- Coluna da Imagem -->
+                    <div class="modal-image-container">
+                        <!-- Carousel Principal -->
+                        <div class="image-carousel">
+                            <div class="carousel-container" id="carouselContainer">
+                                <!-- Imagens serão inseridas dinamicamente aqui -->
+                            </div>
+
+                            <!-- Botões de Navegação -->
+                            <button class="carousel-btn carousel-prev" onclick="mudarImagem(-1)" style="display: none;">
+                                &#8249;
+                            </button>
+                            <button class="carousel-btn carousel-next" onclick="mudarImagem(1)" style="display: none;">
+                                &#8250;
+                            </button>
+
+                            <!-- Indicadores de Posição -->
+                            <div class="carousel-indicators" id="carouselIndicators">
+                                <!-- Pontos serão inseridos dinamicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Thumbnails (Miniaturas) -->
+                        <div class="thumbnails-container" id="thumbnailsContainer" style="display: none;">
+                            <!-- Thumbnails serão inseridas dinamicamente -->
+                        </div>
+                    </div>
+                    <!-- Coluna das Informações -->
+                    <div class="modal-info">
+                        <div class="modal-section">
+                            <h3>📋 Descrição</h3>
+                            <p id="modalDescricao">Descrição do móvel...</p>
+                        </div>
+
+                        <div class="modal-section">
+                            <h3>🔧 Materiais</h3>
+                            <p id="modalMateriais">Materiais utilizados...</p>
+                        </div>
+
+                        <div class="modal-section" id="modalPrecoSection" style="display: none;">
+                            <h3>💰 Preço</h3>
+                            <p id="modalPreco" class="preco-destaque">R$ 0,00</p>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button class="btn-orcamento" onclick="solicitarOrcamentoModal()">
+                                💬 Solicitar Orçamento
+                            </button>
+                            <button class="btn-carrinho" onclick="adicionarAoCarrinhoModal()">
+                                🛒 Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">🔨 Samarone Móveis</div>
+            <ul class="nav-menu">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#moveis">Nossos Móveis</a></li>
+                <li><a href="#sobre">Sobre Nós</a></li>
+                <li><a href="#localizacao">Localização</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="carrinho_compras.html" class="carrinho-btn">🛒 Carrinho</a>
+                <a href="https://wa.me/5522997380687?text=Olá! Vi o site de vocês e gostaria de mais informações!" class="whatsapp-btn">📱 WhatsApp</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Móveis Únicos em <span class="highlight">Metalon</span> e <span class="highlight">Madeira</span></h1>
+            <p>Criamos o móvel dos seus sonhos com qualidade artesanal e design moderno</p>
+            <div class="hero-buttons">
+                <a href="https://wa.me/5522997380687?text=Olá! Gostaria de fazer um orçamento!" class="btn-primary">💬 Fazer Orçamento</a>
+                <a href="#moveis" class="btn-secondary">👀 Ver Nossos Trabalhos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Móveis Section -->
+    <section id="moveis" class="section">
+        <div class="container">
+            <h2 class="section-title">Nossos Móveis</h2>
+            <div class="moveis-grid">
+                <div class="movel-card">
+                    <div class="movel-image">🪑</div>
+                    <div class="movel-content">
+                        <h3 class="movel-title">Mesa de Centro</h3>
+                        <p class="movel-materials">Metalon + Madeira de Demolição</p>
+                        <button class="movel-btn" onclick="solicitarOrcamento('Mesa de Centro')">Solicitar Orçamento</button>
+                    </div>
+                </div>
+
+                <div class="movel-card">
+                    <div class="movel-image">📚</div>
+                    <div class="movel-content">
+                        <h3 class="movel-title">Estante Industrial</h3>
+                        <p class="movel-materials">Metalon + Madeira Tratada</p>
+                        <button class="movel-btn" onclick="solicitarOrcamento('Estante Industrial')">Solicitar Orçamento</button>
+                    </div>
+                </div>
+
+                <div class="movel-card">
+                    <div class="movel-image">📺</div>
+                    <div class="movel-content">
+                        <h3 class="movel-title">Rack para TV</h3>
+                        <p class="movel-materials">Metalon + Madeira Natural</p>
+                        <button class="movel-btn" onclick="solicitarOrcamento('Rack para TV')">Solicitar Orçamento</button>
+                    </div>
+                </div>
+
+                <div class="movel-card">
+                    <div class="movel-image">🍽️</div>
+                    <div class="movel-content">
+                        <h3 class="movel-title">Mesa de Jantar</h3>
+                        <p class="movel-materials">Metalon + Madeira Maciça</p>
+                        <button class="movel-btn" onclick="solicitarOrcamento('Mesa de Jantar')">Solicitar Orçamento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Materiais Section -->
+    <section id="materiais" class="section materiais">
+        <div class="container">
+            <h2 class="section-title">Nossos Materiais</h2>
+            <div class="materiais-grid">
+                <div class="material-card">
+                    <div class="material-icon">⚡</div>
+                    <h3>Metalon</h3>
+                    <p>Estrutura resistente e durável que garante estabilidade e design moderno aos seus móveis. Ideal para criar peças que duram gerações.</p>
+                </div>
+
+                <div class="material-card">
+                    <div class="material-icon">🌳</div>
+                    <h3>Madeira</h3>
+                    <p>Acabamento natural e aconchegante que traz calor ao ambiente. Utilizamos madeiras selecionadas para garantir qualidade e beleza.</p>
+                </div>
+
+                <div class="material-card">
+                    <div class="material-icon">✨</div>
+                    <h3>Combinação Perfeita</h3>
+                    <p>A união do metalon com madeira cria móveis únicos que combinam resistência, funcionalidade e estética moderna.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nós Section -->
+    <section id="sobre" class="section">
+        <div class="container">
+            <h2 class="section-title">Sobre Nós</h2>
+            <div class="sobre-grid">
+                <div class="sobre-image">👨‍👦</div>
+                <div class="sobre-text">
+                    <h3 style="color: var(--vivid-yellow); font-size: 1.5rem; margin-bottom: 1rem;">Pai e filho unidos pela paixão de criar</h3>
+                    <p>Somos pai e filho apaixonados por serralheria/marcenaria. Com anos de experiência combinando metalon e madeira, criamos móveis únicos que transformam ambientes.</p>
+
+
+                    <ul class="diferenciais">
+                        <li>Experiência familiar em serralheria/marcenaria</li>
+                        <li>Qualidade artesanal garantida</li>
+                        <li>Atendimento personalizado para clientes a curta distância</li>
+                        <li>Produtos 100% sob medida</li>
+                        <li>Materiais selecionados</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Localização Section -->
+    <section id="localizacao" class="section localizacao">
+        <div class="container">
+            <h2 class="section-title">Nossa Localização</h2>
+            <div class="localizacao-grid">
+                <a href="https://maps.app.goo.gl/5g5RSqgj1oZSuuGJ6"
+                   target="_blank"
+                   class="mapa mapa-clicavel"
+                   title="Clique para abrir no Google Maps">
+                    🗺️ Mapa Interativo
+                    <small style="display: block; font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">
+                        📍 Clique para ver no Google Maps
+                    </small>
+                </a>
+                <div class="info-contato">
+                    <h3 style="color: var(--rich-black); margin-bottom: 1.5rem;">Visite Nossa Mini Fábrica</h3>
+
+                    <div class="contato-item">
+                        <div class="contato-icon">📍</div>
+                        <div>
+                            <strong>Endereço:</strong><br>
+                            Rua Exemplo, 123 - Centro<br>
+                            Araruama, RJ - CEP: 28970-000
+                        </div>
+                    </div>
+
+                    <div class="contato-item">
+                        <div class="contato-icon">🕒</div>
+                        <div>
+                            <strong>Horário de Atendimento:</strong><br>
+                            Segunda a Sexta: 8h às 18h<br>
+                            Sábado: 8h às 14h
+                        </div>
+                    </div>
+
+                    <div class="contato-item">
+                        <div class="contato-icon">📱</div>
+                        <div>
+                            <strong>WhatsApp:</strong><br>
+                            <a href="https://wa.me/5522997380687">(21) 99999-9999</a>
+                        </div>
+                    </div>
+
+                    <div class="contato-item">
+                        <div class="contato-icon">✨</div>
+                        <div>
+                            <strong>Agendamento:</strong><br>
+                            Agende sua visita via WhatsApp
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>🔨 Móveis Artesanais</h3>
+                    <p>Criamos móveis únicos que transformam ambientes com a combinação perfeita entre metalon e madeira.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p>📱 (21) 99999-9999</p>
+                    <p>📧 contato@moveisartesanais.com</p>
+                    <p>📍 Araruama, RJ</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Horários</h3>
+                    <p>Segunda a Sexta: 8h às 18h</p>
+                    <p>Sábado: 8h às 14h</p>
+                    <p>Domingo: Fechado</p>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2025 Móveis Artesanais - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/5522997380687?text=Olá! Vi o site de vocês e gostaria de mais informações!" class="whatsapp-float" title="Fale conosco no WhatsApp">
+        📱
+    </a>
+
+    <script>
+        // Função para smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ✅ FUNÇÃO ATUALIZADA: Orçamento para móveis sem preço
+        function solicitarOrcamento(nomeMovel) {
+            const mensagem = `Olá! Vi no site de vocês o ${nomeMovel} e gostaria de fazer um orçamento. Podem me ajudar?`;
+            const url = `https://wa.me/5522997380687?text=${encodeURIComponent(mensagem)}`;
+            window.open(url, '_blank');
+        }
+
+        // 🆕 NOVA FUNÇÃO: Adicionar ao carrinho
+        function adicionarAoCarrinho(movelData) {
+            console.log('🛒 Adicionando ao carrinho:', movelData);
+
+            // Carregar carrinho existente
+            let carrinho = JSON.parse(localStorage.getItem('carrinho_samarone') || '[]');
+
+            // Verificar se item já existe
+            const itemExistente = carrinho.find(item => item.movel_id === movelData.id);
+
+            if (itemExistente) {
+                itemExistente.quantidade += 1;
+                mostrarToast(`Quantidade atualizada: ${movelData.nome}`);
+            } else {
+                const novoItem = {
+                    id: Date.now(),
+                    movel_id: movelData.id,
+                    nome: movelData.nome,
+                    materiais: movelData.materiais,
+                    preco_unitario: movelData.preco_atual || 0,
+                    quantidade: 1,
+                    imagem_url: movelData.imagem_url
+                };
+                carrinho.push(novoItem);
+                mostrarToast(`${movelData.nome} adicionado ao carrinho!`);
+            }
+
+            // Salvar e perguntar se quer ir para carrinho
+            localStorage.setItem('carrinho_samarone', JSON.stringify(carrinho));
+
+            setTimeout(() => {
+                if (confirm('Item adicionado! Deseja ir para o carrinho?')) {
+                    window.location.href = 'carrinho_compras.html';
+                }
+            }, 1000);
+        }
+
+        // 🆕 FUNÇÃO MODAL: Adicionar ao carrinho pelo modal
+        function adicionarAoCarrinhoModal() {
+            if (movelAtualModal) {
+                console.log(`🛒 Adicionando ao carrinho via modal: ${movelAtualModal.nome}`);
+                adicionarAoCarrinho(movelAtualModal);
+                fecharModal();
+            }
+        }
+
+        // 🆕 FUNÇÃO: Mostrar notificação toast
+        function mostrarToast(mensagem, tipo = 'success') {
+            // Remover toast existente se houver
+            const toastExistente = document.querySelector('.toast-landing');
+            if (toastExistente) {
+                toastExistente.remove();
+            }
+
+            // Criar novo toast
+            const toast = document.createElement('div');
+            toast.className = `toast-landing ${tipo}`;
+            toast.textContent = mensagem;
+            document.body.appendChild(toast);
+
+            // Mostrar
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Esconder e remover
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Animação simples ao scroll
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.movel-card, .material-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (cardTop < windowHeight - 100) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Inicializar animações
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.movel-card, .material-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s, transform 0.6s';
+            });
+        });
+
+        async function carregarMoveis() {
+            try {
+                console.log('🔄 Carregando móveis da API...');
+
+                // Fazer requisição para a API
+                const response = await fetch('http://localhost:8000/api/moveis/destaques');
+                const data = await response.json();
+
+                if (data.success && data.moveis && data.moveis.length > 0) {
+                    console.log('✅ Móveis carregados:', data.moveis);
+                    renderizarMoveis(data.moveis);
+                } else {
+                    console.log('⚠️ Nenhum móvel encontrado, mantendo layout estático');
+                    // Mantém os cards estáticos se não houver dados
+                }
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar móveis:', error);
+                // Em caso de erro, mantém layout estático
+            }
+        }
+
+        function renderizarMoveis(moveis) {
+            const moveisGrid = document.querySelector('.moveis-grid');
+
+            if (!moveisGrid) {
+                console.error('❌ Container .moveis-grid não encontrado');
+                return;
+            }
+
+            // Limpar cards existentes
+            moveisGrid.innerHTML = '';
+
+            // Criar cards dinamicamente
+            moveis.forEach(movel => {
+                const card = criarCardMovel(movel);
+                moveisGrid.appendChild(card);
+            });
+
+            console.log(`✅ ${moveis.length} móveis renderizados`);
+        }
+
+        // Função para fechar modal clicando no overlay
+        function configurarModalClickOutside() {
+            const modal = document.getElementById('modalDetalhes');
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    fecharModal();
+                }
+            });
+        }
+
+        // Função para fechar modal com ESC
+        function configurarModalEsc() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && document.getElementById('modalDetalhes').style.display === 'flex') {
+                    fecharModal();
+                }
+            });
+        }
+        let movelAtualModal = null;
+
+        // Função para abrir modal com detalhes do móvel
+        function abrirModalDetalhes(movel) {
+            console.log('🔍 Abrindo modal para:', movel.nome);
+            console.log('📊 Dados completos do móvel:', movel);
+
+            // Guardar móvel atual
+            movelAtualModal = movel;
+
+            // Preencher dados do modal
+            document.getElementById('modalTitulo').textContent = movel.nome;
+            document.getElementById('modalDescricao').textContent = movel.descricao;
+            document.getElementById('modalMateriais').textContent = movel.materiais;
+
+            // Configurar imagens do carousel
+            configurarImagensCarousel(movel);
+
+            // ✅ ATUALIZADO: Mostrar/esconder botões baseado no preço
+            const precoSection = document.getElementById('modalPrecoSection');
+            const precoElement = document.getElementById('modalPreco');
+            const btnCarrinho = document.querySelector('.btn-carrinho');
+            const btnOrcamento = document.querySelector('.btn-orcamento');
+
+            if (movel.preco_atual && movel.preco_atual > 0) {
+                // Tem preço - mostrar botão carrinho
+                precoElement.textContent = `R$ ${movel.preco_atual.toFixed(2).replace('.', ',')}`;
+                precoSection.style.display = 'block';
+                btnCarrinho.style.display = 'block';
+                btnOrcamento.textContent = '💬 Solicitar Orçamento';
+            } else {
+                // Sem preço - só orçamento
+                precoSection.style.display = 'none';
+                btnCarrinho.style.display = 'none';
+                btnOrcamento.textContent = '💬 Solicitar Orçamento';
+            }
+
+            // Mostrar modal
+            const modal = document.getElementById('modalDetalhes');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Inicializar eventos do modal
+            setTimeout(inicializarEventosModal, 100);
+        }
+        function configurarImagensCarousel(movel) {
+            const carouselContainer = document.getElementById('carouselContainer');
+            const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+
+            // Preparar array de imagens
+            imagensAtual = [];
+
+            console.log('🖼️ Verificando imagens do móvel...');
+
+            // Se tem múltiplas imagens
+            if (movel.imagens && Array.isArray(movel.imagens) && movel.imagens.length > 0) {
+                imagensAtual = movel.imagens.map(img => ({
+                    url: img.url,
+                    alt: img.alt || `${movel.nome} - Imagem`,
+                    principal: img.principal || false
+                }));
+                console.log(`✅ Usando ${imagensAtual.length} imagens da tabela moveis_imagens`);
+            }
+            // Fallback para imagem única
+            else if (movel.imagem_url) {
+                imagensAtual = [{
+                    url: movel.imagem_url,
+                    alt: `${movel.nome} - Imagem Principal`,
+                    principal: true
+                }];
+                console.log('📷 Usando imagem única (fallback)');
+            }
+            // Último recurso: placeholder
+            else {
+                imagensAtual = [{
+                    url: 'placeholder',
+                    alt: `${movel.nome} - Sem Imagem`,
+                    principal: true
+                }];
+                console.log('📷 Usando placeholder');
+            }
+
+            // Resetar index
+            imagemIndex = 0;
+
+            // Limpar containers
+            carouselContainer.innerHTML = '';
+            if (thumbnailsContainer) thumbnailsContainer.innerHTML = '';
+            if (indicatorsContainer) indicatorsContainer.innerHTML = '';
+
+            // ✅ CONFIGURAÇÃO CORRIGIDA DO CONTAINER
+            carouselContainer.style.display = 'flex';
+            carouselContainer.style.width = `${imagensAtual.length * 100}%`; // Container total largo
+            carouselContainer.style.height = '100%';
+            carouselContainer.style.transition = 'transform 0.3s ease';
+
+            // ✅ CRIAR IMAGENS COM DIMENSÕES CORRETAS
+            imagensAtual.forEach((imagemObj, index) => {
+                const img = document.createElement('img');
+                img.className = 'carousel-image';
+                img.alt = imagemObj.alt;
+
+                // ✅ CORREÇÃO CRÍTICA: Cada imagem ocupa uma fração do container total
+                img.style.width = `${100 / imagensAtual.length}%`;
+                img.style.height = '100%';
+                img.style.objectFit = 'contain';
+                img.style.flexShrink = '0';
+                img.style.flexGrow = '0';
+
+                if (imagemObj.url === 'placeholder') {
+                    img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0OCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfmrzwn6G0PC90ZXh0Pjwvc3ZnPg==';
+                } else {
+                    img.src = `http://localhost:8000/${imagemObj.url}`;
+
+                    img.onerror = function() {
+                        console.log(`⚠️ Erro ao carregar: ${imagemObj.url}`);
+                        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0OCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfmrzwn6G0PC90ZXh0Pjwvc3ZnPg==';
+                    };
+
+                    img.onload = function() {
+                        console.log(`✅ Imagem carregada: ${imagemObj.url}`);
+                    };
+                }
+
+                carouselContainer.appendChild(img);
+            });
+
+            // Se tem múltiplas imagens, mostrar controles
+            if (imagensAtual.length > 1) {
+                criarIndicadores();
+                criarThumbnails(movel.nome);
+                mostrarControlesCarousel(true);
+                console.log(`🎛️ Controles ativados para ${imagensAtual.length} imagens`);
+            } else {
+                mostrarControlesCarousel(false);
+                console.log('🎛️ Controles desativados (apenas 1 imagem)');
+            }
+
+            // Posicionar no primeiro item
+            atualizarPosicaoCarousel();
+        }
+        function criarIndicadores() {
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+            if (!indicatorsContainer) return;
+
+            indicatorsContainer.innerHTML = '';
+
+            imagensAtual.forEach((_, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+                indicator.style.width = '12px';
+                indicator.style.height = '12px';
+                indicator.style.borderRadius = '50%';
+                indicator.style.background = index === 0 ? 'var(--vivid-yellow)' : 'rgba(255, 255, 255, 0.5)';
+                indicator.style.cursor = 'pointer';
+                indicator.style.transition = 'all 0.3s ease';
+                indicator.onclick = () => irParaImagem(index);
+                indicatorsContainer.appendChild(indicator);
+            });
+        }
+
+        function criarThumbnails(nomeMovel) {
+            const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+            if (!thumbnailsContainer) return;
+
+            thumbnailsContainer.innerHTML = '';
+
+            if (imagensAtual.length > 1) {
+                thumbnailsContainer.style.display = 'flex';
+
+                imagensAtual.forEach((imagemObj, index) => {
+                    const thumbnail = document.createElement('img');
+                    thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+                    thumbnail.alt = `${nomeMovel} - Miniatura ${index + 1}`;
+                    thumbnail.title = imagemObj.alt || `Imagem ${index + 1}`;
+                    thumbnail.style.width = '60px';
+                    thumbnail.style.height = '60px';
+                    thumbnail.style.objectFit = 'cover';
+                    thumbnail.style.borderRadius = '8px';
+                    thumbnail.style.cursor = 'pointer';
+                    thumbnail.style.border = index === 0 ? '2px solid var(--vivid-yellow)' : '2px solid transparent';
+                    thumbnail.style.transition = 'all 0.3s ease';
+
+                    if (imagemObj.url === 'placeholder') {
+                        thumbnail.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn5q88J+htDwvdGV4dD48L3N2Zz4=';
+                    } else {
+                        thumbnail.src = `http://localhost:8000/${imagemObj.url}`;
+                    }
+
+                    thumbnail.onclick = () => irParaImagem(index);
+                    thumbnailsContainer.appendChild(thumbnail);
+                });
+            } else {
+                thumbnailsContainer.style.display = 'none';
+            }
+        }
+        function mostrarControlesCarousel(mostrar) {
+            const botoes = document.querySelectorAll('.carousel-btn');
+            const indicadores = document.getElementById('carouselIndicators');
+
+            botoes.forEach(btn => {
+                btn.style.display = mostrar ? 'flex' : 'none';
+            });
+
+            if (indicadores) {
+                indicadores.style.display = mostrar ? 'flex' : 'none';
+            }
+        }
+
+        // Função para mudar imagem (botões prev/next)
+        function mudarImagem(direcao) {
+            imagemIndex += direcao;
+
+            if (imagemIndex >= imagensAtual.length) {
+                imagemIndex = 0;
+            } else if (imagemIndex < 0) {
+                imagemIndex = imagensAtual.length - 1;
+            }
+
+            atualizarPosicaoCarousel();
+        }
+
+        // Função para ir para imagem específica
+        function irParaImagem(index) {
+            imagemIndex = index;
+            atualizarPosicaoCarousel();
+        }
+
+        // Função para atualizar posição do carousel
+        function atualizarPosicaoCarousel() {
+            const carouselContainer = document.getElementById('carouselContainer');
+            if (!carouselContainer) return;
+
+            // ✅ CORREÇÃO CRÍTICA: Mover exatamente 100% por imagem
+            const translateX = -imagemIndex * (100 / imagensAtual.length);
+            carouselContainer.style.transform = `translateX(${translateX}%)`;
+
+            console.log(`🎯 Movendo carousel para imagem ${imagemIndex}: translateX(${translateX}%)`);
+
+            // Atualizar indicadores
+            const indicadores = document.querySelectorAll('.indicator');
+            indicadores.forEach((ind, index) => {
+                if (index === imagemIndex) {
+                    ind.style.background = 'var(--vivid-yellow)';
+                    ind.style.transform = 'scale(1.2)';
+                } else {
+                    ind.style.background = 'rgba(255, 255, 255, 0.5)';
+                    ind.style.transform = 'scale(1)';
+                }
+            });
+
+            // Atualizar thumbnails
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                if (index === imagemIndex) {
+                    thumb.style.borderColor = 'var(--vivid-yellow)';
+                    thumb.style.transform = 'scale(1.1)';
+                } else {
+                    thumb.style.borderColor = 'transparent';
+                    thumb.style.transform = 'scale(1)';
+                }
+            });
+        }
+
+        // Função para inicializar eventos do modal
+        function inicializarEventosModal() {
+            // Navegação por teclado
+            document.addEventListener('keydown', function(e) {
+                if (document.getElementById('modalDetalhes').style.display === 'flex') {
+                    if (e.key === 'ArrowLeft') {
+                        mudarImagem(-1);
+                    } else if (e.key === 'ArrowRight') {
+                        mudarImagem(1);
+                    }
+                }
+            });
+
+            // Touch/Swipe para mobile
+            const carouselContainer = document.getElementById('carouselContainer');
+            if (carouselContainer && imagensAtual.length > 1) {
+                let startX = 0;
+                let currentX = 0;
+                let isDragging = false;
+
+                carouselContainer.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                });
+
+                carouselContainer.addEventListener('touchmove', function(e) {
+                    if (!isDragging) return;
+                    currentX = e.touches[0].clientX;
+                });
+
+                carouselContainer.addEventListener('touchend', function(e) {
+                    if (!isDragging) return;
+                    isDragging = false;
+
+                    const deltaX = currentX - startX;
+                    const threshold = 50;
+
+                    if (Math.abs(deltaX) > threshold) {
+                        if (deltaX > 0) {
+                            mudarImagem(-1); // Anterior
+                        } else {
+                            mudarImagem(1);  // Próxima
+                        }
+                    }
+                });
+            }
+        }
+
+
+        // Função para fechar modal
+        function fecharModal() {
+            console.log('❌ Fechando modal');
+
+            const modal = document.getElementById('modalDetalhes');
+            modal.style.display = 'none';
+            modal.classList.remove('modal-active');
+
+            // Restaurar scroll do body
+            document.body.style.overflow = 'auto';
+
+            // Limpar móvel atual
+            movelAtualModal = null;
+        }
+
+        // Função para solicitar orçamento no modal
+        function solicitarOrcamentoModal() {
+            if (movelAtualModal) {
+                console.log(`💬 Solicitando orçamento para: ${movelAtualModal.nome}`);
+
+                const mensagem = `Olá! Vi no site de vocês o *${movelAtualModal.nome}* e gostaria de fazer um orçamento.
+
+        📋 *Descrição:* ${movelAtualModal.descricao}
+        🔧 *Materiais:* ${movelAtualModal.materiais}
+
+        Podem me ajudar com mais informações e orçamento?`;
+
+                const url = `https://wa.me/5522997380687?text=${encodeURIComponent(mensagem)}`;
+                window.open(url, '_blank');
+
+                // Fechar modal após enviar
+                fecharModal();
+            }
+        }
+
+        // ✅ FUNÇÃO ATUALIZADA: Criar card com botões inteligentes
+        function criarCardMovel(movel) {
+           const card = document.createElement('div');
+            const imageContainer = document.createElement('div');
+            const content = document.createElement('div');
+            const title = document.createElement('h3');
+            const materials = document.createElement('p');
+            const precoContainer = document.createElement('div');
+            const button = document.createElement('button');
+
+            // Configurar classes CSS
+            card.className = 'movel-card';
+            imageContainer.className = 'movel-image';
+            content.className = 'movel-content';
+            title.className = 'movel-title';
+            materials.className = 'movel-materials';
+            precoContainer.className = 'movel-preco';
+            button.className = 'movel-btn';
+
+            // Configurar conteúdo básico
+            title.textContent = movel.nome;
+            materials.textContent = movel.materiais;
+
+            // ✅ OTIMIZAÇÃO: Configurar imagem DIRETAMENTE (sem emoji intermediário)
+            if (movel.imagem_url) {
+                // 1. Mostrar loading placeholder enquanto carrega
+                imageContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 200px; background: var(--light-gray); color: #999;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏳</div>
+                            <div style="font-size: 0.9rem;">Carregando...</div>
+                        </div>
+                    </div>
+                `;
+
+                // 2. Criar e configurar imagem
+                const image = document.createElement('img');
+                image.style.width = '100%';
+                image.style.height = '200px';
+                image.style.objectFit = 'cover';
+                image.style.borderRadius = '15px 15px 0 0';
+                image.alt = movel.nome;
+
+                // 3. Quando carregar COM SUCESSO
+                image.onload = function() {
+                    console.log(`✅ Imagem carregada: ${movel.nome}`);
+                    imageContainer.innerHTML = ''; // Limpar loading
+                    imageContainer.appendChild(image); // Adicionar imagem real
+                };
+
+                // 4. Se der ERRO, aí sim mostrar emoji
+                image.onerror = function() {
+                    console.log(`⚠️ Erro ao carregar imagem: ${movel.nome}, usando emoji`);
+                    imageContainer.innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: center; height: 200px; background: var(--light-gray); font-size: 3rem;">
+                            ${getEmojiPorTipo(movel.nome)}
+                        </div>
+                    `;
+                };
+
+                // 5. Iniciar carregamento
+                image.src = `http://localhost:8000/${movel.imagem_url}`;
+
+            } else {
+                // Sem URL de imagem - mostrar emoji direto
+                imageContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 200px; background: var(--light-gray); font-size: 3rem;">
+                        ${getEmojiPorTipo(movel.nome)}
+                    </div>
+                `;
+            }
+
+            // ✅ CONFIGURAR PREÇOS E BOTÕES INTELIGENTES
+            if (movel.preco_atual && movel.preco_atual > 0) {
+                // Tem preço - mostrar preço e botão "Comprar"
+                if (movel.tem_promocao && movel.preco_promocional) {
+                    precoContainer.innerHTML = `
+                        <div style="color: #999; text-decoration: line-through; font-size: 0.9rem;">
+                            R$ ${movel.preco_base.toFixed(2).replace('.', ',')}
+                        </div>
+                        <div style="color: #e60000; font-weight: bold; font-size: 1.2rem;">
+                            R$ ${movel.preco_promocional.toFixed(2).replace('.', ',')}
+                        </div>
+                    `;
+                } else {
+                    precoContainer.innerHTML = `
+                        <div style="color: var(--rich-black); font-weight: bold; font-size: 1.2rem;">
+                            R$ ${movel.preco_atual.toFixed(2).replace('.', ',')}
+                        </div>
+                    `;
+                }
+                button.textContent = '🛒 Adicionar ao Carrinho';
+                button.onclick = () => adicionarAoCarrinho(movel); // ✅ Vai para carrinho
+            } else {
+                // Sem preço - botão "Solicitar Orçamento"
+                precoContainer.innerHTML = `
+                    <div style="color: #666; font-style: italic;">
+                        Consulte o preço
+                    </div>
+                `;
+                button.textContent = '💬 Solicitar Orçamento';
+                button.onclick = () => solicitarOrcamento(movel.nome); // ✅ Vai para WhatsApp
+            }
+
+            // Montar estrutura
+            content.appendChild(title);
+            content.appendChild(materials);
+            content.appendChild(precoContainer);
+            content.appendChild(button);
+            card.appendChild(imageContainer);
+            card.appendChild(content);
+
+            // ✅ EVENTO DE CLIQUE NO CARD (modal)
+            card.style.cursor = 'pointer';
+            card.onclick = function(e) {
+                if (!e.target.classList.contains('movel-btn')) {
+                    abrirModalDetalhes(movel);
+                }
+            };
+
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+
+            return card;
+        }
+            // Inicializar modal quando DOM carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            configurarModalClickOutside();
+            configurarModalEsc();
+        });
+        function getEmojiPorTipo(nomeMovel) {
+            const nome = nomeMovel.toLowerCase();
+
+            if (nome.includes('mesa')) return '🪑';
+            if (nome.includes('estante')) return '📚';
+            if (nome.includes('rack')) return '📺';
+            if (nome.includes('cadeira')) return '🪑';
+            if (nome.includes('cama')) return '🛏️';
+            if (nome.includes('armário')) return '🚪';
+            if (nome.includes('bancada')) return '🔨';
+
+            return '🪑'; // emoji padrão
+        }
+
+        async function carregarInfoEmpresa() {
+            try {
+                const response = await fetch('http://localhost:8000/api/info/empresa');
+                const data = await response.json();
+
+                if (data.success && data.informacao) {
+                    console.log('✅ Informações da empresa carregadas:', data.informacao);
+                    atualizarInfoEmpresa(data.informacao);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar info da empresa:', error);
+            }
+        }
+
+        function atualizarInfoEmpresa(info) {
+            console.log('🔧 Atualizando informações da empresa no DOM...');
+            console.log('📋 Dados recebidos:', info);
+
+            // ✅ Atualizar nome da empresa no header
+            const logos = document.querySelectorAll('.logo');
+            logos.forEach(logo => {
+                if (info.nome) {
+                    logo.innerHTML = `🔨 ${info.nome}`;
+                    console.log(`✅ Logo atualizado para: ${info.nome}`);
+                }
+            });
+
+            // ✅ CORRIGIDO: Atualizar endereço na seção "Visite Nossa Mini Fábrica"
+            if (info.endereco) {
+                // Buscar especificamente o div que contém "Rua Exemplo, 123"
+                const contatoItems = document.querySelectorAll('.contato-item');
+                console.log(`🔍 Encontrados ${contatoItems.length} itens de contato`);
+
+                contatoItems.forEach((item, index) => {
+                    const iconeDiv = item.querySelector('.contato-icon');
+                    const textoDiv = item.querySelector('div:not(.contato-icon)');
+
+                    console.log(`🔍 Item ${index}: ícone=${iconeDiv?.textContent}, texto=${textoDiv?.textContent?.substring(0, 50)}...`);
+
+                    // Procurar pelo ícone de localização 📍
+                    if (iconeDiv && iconeDiv.textContent.includes('📍') && textoDiv) {
+                        console.log('🎯 Encontrou item de endereço, atualizando...');
+                        textoDiv.innerHTML = `
+                            <strong>Endereço:</strong><br>
+                            ${info.endereco.rua}<br>
+                            ${info.endereco.cidade}, ${info.endereco.estado}<br>
+                            ${info.endereco.cep}
+                        `;
+                        console.log('✅ Endereço atualizado na seção de contato');
+                    }
+
+                    // Procurar pelo ícone de telefone 📱
+                    if (iconeDiv && iconeDiv.textContent.includes('📱') && textoDiv && info.contato) {
+                        console.log('🎯 Encontrou item de telefone, atualizando...');
+                        // Formatar telefone: 22997380687 -> (22) 99738-0687
+                        const whats = info.contato.whatsapp;
+                        const telefoneFormatado = `(${whats.substring(0,2)}) ${whats.substring(2,7)}-${whats.substring(7)}`;
+                        textoDiv.innerHTML = `
+                            <strong>WhatsApp:</strong><br>
+                            <a href="https://wa.me/55${whats}">${telefoneFormatado}</a>
+                        `;
+                        console.log(`✅ Telefone na seção atualizado: ${telefoneFormatado}`);
+                    }
+                });
+            }
+            if (info.endereco) {
+                const mapaElement = document.querySelector('.mapa');
+                if (mapaElement) {
+                    // Construir URL do Google Maps
+                    const endereco = `${info.endereco.rua}, ${info.endereco.cidade}, ${info.endereco.estado}`;
+                    const enderecoEncoded = encodeURIComponent(endereco);
+                    const googleMapsUrl = `https://maps.google.com/maps?q=${enderecoEncoded}`;
+
+                    // Transformar div em link clicável
+                    mapaElement.innerHTML = `
+                        🗺️ Mapa Interativo
+                        <small style="display: block; font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">
+                            📍 Clique para ver no Google Maps
+                        </small>
+                    `;
+
+                    // Adicionar evento de clique
+                    mapaElement.style.cursor = 'pointer';
+                    mapaElement.onclick = function() {
+                        window.open(googleMapsUrl, '_blank');
+                        console.log(`🗺️ Abrindo mapa para: ${endereco}`);
+                    };
+
+                    // Adicionar classes CSS
+                    mapaElement.classList.add('mapa-clicavel');
+
+                    console.log(`✅ Mapa configurado para: ${endereco}`);
+                }
+            }
+        const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
+        console.log(`🔍 Encontrados ${whatsappLinks.length} links de WhatsApp`);
+        whatsappLinks.forEach((link, index) => {
+            if (info.contato && info.contato.whatsapp) {
+                const numeroFormatado = info.contato.whatsapp;
+                const novoHref = link.href.replace(/5522997380687|22997380687/g, `55${numeroFormatado}`);
+                link.href = novoHref;
+                console.log(`✅ Link WhatsApp ${index + 1} atualizado para: ${numeroFormatado}`);
+            }
+        });
+
+        // ✅ Atualizar footer
+        if (info.endereco) {
+            const footerTextos = document.querySelectorAll('.footer-section p');
+            footerTextos.forEach(p => {
+                if (p.textContent.includes('Araruama, RJ')) {
+                    p.innerHTML = `📍 ${info.endereco.cidade}, ${info.endereco.estado}`;
+                    console.log('✅ Localização no footer atualizada');
+                }
+            });
+        }
+
+
+        if (info.contato && info.contato.whatsapp) {
+        const footerTextos = document.querySelectorAll('.footer-section p');
+        footerTextos.forEach(p => {
+            if (p.textContent.includes('(21) 99999-9999')) {
+                // Formatar telefone: 22997380687 -> (22) 99738-0687
+                const whats = info.contato.whatsapp;
+                const telefoneFormatado = `(${whats.substring(0,2)}) ${whats.substring(2,7)}-${whats.substring(7)}`;
+                p.innerHTML = `📱 ${telefoneFormatado}`;
+                console.log(`✅ Telefone no footer atualizado: ${telefoneFormatado}`);
+            }
+        });
+    }
+
+        // ✅ Atualizar email no footer
+        if (info.contato && info.contato.email) {
+            const footerTextos = document.querySelectorAll('.footer-section p');
+            footerTextos.forEach(p => {
+                if (p.textContent.includes('contato@moveisartesanais.com')) {
+                    p.innerHTML = `📧 ${info.contato.email}`;
+                    console.log(`✅ Email no footer atualizado: ${info.contato.email}`);
+                }
+            });
+        }
+
+        // ✅ Atualizar nome da empresa no footer
+        const footerTitulos = document.querySelectorAll('.footer-section h3');
+        footerTitulos.forEach(h3 => {
+            if (h3.textContent.includes('Móveis Artesanais')) {
+                h3.innerHTML = `🔨 ${info.nome}`;
+                console.log(`✅ Nome no footer atualizado: ${info.nome}`);
+            }
+        });
+
+        console.log('✅ Processamento completo das informações da empresa!');
+    }
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando carregamento de dados...');
+
+            // Carregar dados da API
+            carregarMoveis();
+            carregarInfoEmpresa();
+
+            // Manter funcionalidades existentes
+            const cards = document.querySelectorAll('.movel-card, .material-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s, transform 0.6s';
+            });
+        });
+
+        async function testarAPI() {
+            try {
+                console.log('🧪 Testando conexão com API...');
+
+                const response = await fetch('http://localhost:8000/api/moveis/destaques');
+                const data = await response.json();
+
+                console.log('📊 Resposta da API:', data);
+                console.log('📈 Status da conexão:', response.ok ? '✅ Sucesso' : '❌ Erro');
+
+                return data;
+            } catch (error) {
+                console.error('❌ Erro na conexão:', error);
+                return null;
+            }
+        }
+        window.testarAPI = testarAPI;
+
+    </script>
+</body>
+</html>
