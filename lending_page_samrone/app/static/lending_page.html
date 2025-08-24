@@ -1379,6 +1379,113 @@
     </a>
 
     <script>
+
+        // Função para URLs da API
+        function getApiUrl(endpoint) {
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+
+            if (isLocal) {
+                return `http://localhost:8000${endpoint}`;
+            } else {
+                return endpoint; // Produção usa caminho relativo
+            }
+        }
+
+        // Função para URLs de imagens
+        function getImageUrl(imagePath) {
+            if (!imagePath) return '';
+
+            if (imagePath.startsWith('http')) {
+                return imagePath;
+            }
+
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+
+            if (isLocal) {
+                return `http://localhost:8000/${imagePath}`;
+            } else {
+                return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+            }
+        }
+
+        console.log(`🌍 Ambiente: ${window.location.hostname === 'localhost' ? 'LOCAL' : 'PRODUÇÃO'}`);
+
+        // ✅ ATUALIZAR FUNÇÃO carregarMoveis()
+        async function carregarMoveis() {
+            try {
+                console.log('📄 Carregando móveis da API...');
+
+                // 🔥 MUDANÇA AQUI:
+                const response = await fetch(getApiUrl('/api/moveis/destaques'));
+                const data = await response.json();
+
+                if (data.success && data.moveis && data.moveis.length > 0) {
+                    console.log('✅ Móveis carregados:', data.moveis);
+                    renderizarMoveis(data.moveis);
+                } else {
+                    console.log('⚠️ Nenhum móvel encontrado, mantendo layout estático');
+                }
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar móveis:', error);
+            }
+        }
+
+        // ✅ ATUALIZAR FUNÇÃO carregarInfoEmpresa()
+        async function carregarInfoEmpresa() {
+            try {
+                // 🔥 MUDANÇA AQUI:
+                const response = await fetch(getApiUrl('/api/info/empresa'));
+                const data = await response.json();
+
+                if (data.success && data.informacao) {
+                    console.log('✅ Informações da empresa carregadas:', data.informacao);
+                    atualizarInfoEmpresa(data.informacao);
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar info da empresa:', error);
+            }
+        }
+
+        // ✅ ATUALIZAR FUNÇÃO criarCardMovel() - parte das imagens
+        function criarCardMovel(movel) {
+            // ... resto do código ...
+
+            if (movel.imagem_url) {
+                // 🔥 MUDANÇA AQUI:
+                image.src = getImageUrl(movel.imagem_url);
+            }
+
+            // ... resto do código ...
+        }
+
+        // ✅ ATUALIZAR FUNÇÃO configurarImagensCarousel()
+        function configurarImagensCarousel(movel) {
+            // ... código existente ...
+
+            imagensAtual.forEach((imagemObj, index) => {
+                const img = document.createElement('img');
+                // ... configurações da imagem ...
+
+                if (imagemObj.url !== 'placeholder') {
+                    // 🔥 MUDANÇA AQUI:
+                    img.src = getImageUrl(imagemObj.url);
+                }
+
+                // ... resto do código ...
+            });
+
+            // Para thumbnails também:
+            imagensAtual.forEach((imagemObj, index) => {
+                const thumbnail = document.createElement('img');
+                // ... configurações ...
+
+                if (imagemObj.url !== 'placeholder') {
+                    // 🔥 MUDANÇA AQUI:
+                    thumbnail.src = getImageUrl(imagemObj.url);
+                }
         // Função para smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1499,7 +1606,7 @@
                 console.log('🔄 Carregando móveis da API...');
 
                 // Fazer requisição para a API
-                const response = await fetch('http://localhost:8000/api/moveis/destaques');
+                const response = await fetch(getApiUrl('/api/moveis/destaques'));
                 const data = await response.json();
 
                 if (data.success && data.moveis && data.moveis.length > 0) {
@@ -1667,7 +1774,7 @@
                 if (imagemObj.url === 'placeholder') {
                     img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0OCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfmrzwn6G0PC90ZXh0Pjwvc3ZnPg==';
                 } else {
-                    img.src = `http://localhost:8000/${imagemObj.url}`;
+                    img.src = getImageUrl(imagemObj.url);
 
                     img.onerror = function() {
                         console.log(`⚠️ Erro ao carregar: ${imagemObj.url}`);
@@ -1741,7 +1848,7 @@
                     if (imagemObj.url === 'placeholder') {
                         thumbnail.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn5q88J+htDwvdGV4dD48L3N2Zz4=';
                     } else {
-                        thumbnail.src = `http://localhost:8000/${imagemObj.url}`;
+                        thumbnail.src = getImageUrl(imagemObj.url);
                     }
 
                     thumbnail.onclick = () => irParaImagem(index);
@@ -2054,7 +2161,7 @@
 
         async function carregarInfoEmpresa() {
             try {
-                const response = await fetch('http://localhost:8000/api/info/empresa');
+                const response = await fetch(getApiUrl('/api/info/empresa'));
                 const data = await response.json();
 
                 if (data.success && data.informacao) {
@@ -2224,7 +2331,7 @@
             try {
                 console.log('🧪 Testando conexão com API...');
 
-                const response = await fetch('http://localhost:8000/api/moveis/destaques');
+                const response = await fetch(getApiUrl('/api/moveis/destaques'));
                 const data = await response.json();
 
                 console.log('📊 Resposta da API:', data);
