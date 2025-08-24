@@ -1964,7 +1964,7 @@
                 };
 
                 // 5. Iniciar carregamento
-                image.src = `http://localhost:8000/${movel.imagem_url}`;
+                image.src = movel.imagem_url.startsWith('/') ? movel.imagem_url : `/${movel.imagem_url}`;
 
             } else {
                 // Sem URL de imagem - mostrar emoji direto
