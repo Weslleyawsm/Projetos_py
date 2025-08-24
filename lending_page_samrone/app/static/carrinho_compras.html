@@ -656,6 +656,23 @@
     <div id="toast" class="toast"></div>
 
     <script>
+
+        function getImageUrl(imagePath) {
+            if (!imagePath) return '';
+
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+
+            if (isLocal) {
+                return `http://localhost:8000/${imagePath}`;
+            } else {
+                return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+            }
+        }
+
+        console.log(`🌍 Ambiente: ${window.location.hostname === 'localhost' ? 'LOCAL' : 'PRODUÇÃO'}`);
+
+
         // 🔧 VARIÁVEIS GLOBAIS
         let carrinho = [];
         let carrinhoId = null; // Para backend
@@ -938,7 +955,7 @@
             itemDiv.innerHTML = `
                 <div class="item-imagem ${item.imagem_url ? '' : 'placeholder'}">
                     ${item.imagem_url ?
-                        <img src="${item.imagem_url.startsWith('/') ? item.imagem_url : `/${item.imagem_url}`}"
+                        `<img src="${getImageUrl(item.imagem_url)}"
                              alt="${item.nome}"
                              onerror="this.parentElement.innerHTML='🪑'; this.parentElement.classList.add('placeholder');">`
                         : getEmojiPorTipo(item.nome)
