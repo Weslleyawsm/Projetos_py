@@ -938,7 +938,7 @@
             itemDiv.innerHTML = `
                 <div class="item-imagem ${item.imagem_url ? '' : 'placeholder'}">
                     ${item.imagem_url ?
-                        `<img src="http://localhost:8000/${item.imagem_url}"
+                        <img src="${item.imagem_url.startsWith('/') ? item.imagem_url : `/${item.imagem_url}`}"
                              alt="${item.nome}"
                              onerror="this.parentElement.innerHTML='🪑'; this.parentElement.classList.add('placeholder');">`
                         : getEmojiPorTipo(item.nome)
