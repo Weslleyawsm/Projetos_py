@@ -119,7 +119,7 @@ class APIRouter(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', mime_type)
             self.send_header('Content-length', str(len(image_data)))
-            self.send_header('Cache-Control', 'public, max-age=2')
+            self.send_header('Cache-Control', 'public, max-age=86400')
             self._set_cors_headers()
             self.end_headers()
             self.wfile.write(image_data)
