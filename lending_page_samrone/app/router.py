@@ -190,7 +190,10 @@ class APIRouter(BaseHTTPRequestHandler):
     def _serve_static_file(self, filename):
         """Serve arquivos estáticos (HTML, CSS, JS)"""
         try:
-            with open(filename, 'r', encoding='utf-8') as arquivo:
+            file_path = os.path.join(self.project_root, filename)  # ← Usar file_path
+            print(f"🔍 Tentando abrir: {file_path}")
+
+            with open(file_path, 'r', encoding='utf-8') as arquivo:
                 conteudo = arquivo.read()
 
             if filename.endswith('.html'):
