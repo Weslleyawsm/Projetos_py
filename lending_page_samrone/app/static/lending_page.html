@@ -1417,6 +1417,31 @@
     </a>
 
     <script>
+        // 🔧 ADICIONE ESTA PARTE NO INÍCIO DO SEU <script>, ANTES DE QUALQUER FUNÇÃO:
+
+        // ✅ DETECÇÃO AUTOMÁTICA DO AMBIENTE
+        function getAPIBaseURL() {
+            // Se estiver rodando localmente
+            if (window.location.hostname === 'localhost' ||
+                window.location.hostname === '127.0.0.1') {
+                return 'http://localhost:8000';
+            }
+
+            // Se estiver no Render ou outro ambiente de produção
+            // Usar a mesma URL base do frontend
+            return window.location.origin;
+        }
+
+        // 🌐 CONFIGURAÇÃO GLOBAL - MUITO IMPORTANTE!
+        const API_BASE = getAPIBaseURL();
+        console.log(`🔗 API Base URL: ${API_BASE}`);
+
+        // 📦 VARIABLES GLOBAIS DO CAROUSEL
+        let imagensAtual = [];
+        let imagemIndex = 0;
+        let movelAtualModal = null;
+
+        // ✅ AGORA SEU CÓDIGO EXISTENTE VAI FUNCIONAR:
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1431,21 +1456,20 @@
             });
         });
 
-        //
         function solicitarOrcamento(nomeMovel) {
             const mensagem = `Olá! Vi o site de vocêS no ${nomeMovel} e gostaria de fazer um orçamento. Podem me ajudar?`;
             const url = `https://wa.me/5522997380687?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
         }
 
-        // ðŸ†• NOVA FUNÃ‡ÃƒO: Adicionar ao carrinho
+        // 🆕 NOVA FUNÇÃO: Adicionar ao carrinho
         function adicionarAoCarrinho(movelData) {
-            console.log('ðŸ›’ Adicionando ao carrinho:', movelData);
+            console.log('🛒 Adicionando ao carrinho:', movelData);
 
             // Carregar carrinho existente
             let carrinho = JSON.parse(localStorage.getItem('carrinho_samarone') || '[]');
 
-            // Verificar se item jÃ¡ existe
+            // Verificar se item já existe
             const itemExistente = carrinho.find(item => item.movel_id === movelData.id);
 
             if (itemExistente) {
@@ -1475,16 +1499,16 @@
             }, 1000);
         }
 
-        // ðŸ†• FUNÃ‡ÃƒO MODAL: Adicionar ao carrinho pelo modal
+        // 🆕 FUNÇÃO MODAL: Adicionar ao carrinho pelo modal
         function adicionarAoCarrinhoModal() {
             if (movelAtualModal) {
-                console.log(`ðŸ›’ Adicionando ao carrinho via modal: ${movelAtualModal.nome}`);
+                console.log(`🛒 Adicionando ao carrinho via modal: ${movelAtualModal.nome}`);
                 adicionarAoCarrinho(movelAtualModal);
                 fecharModal();
             }
         }
 
-        // ðŸ†• FUNÃ‡ÃƒO: Mostrar notificaÃ§Ã£o toast
+        // 🆕 FUNÇÃO: Mostrar notificação toast
         function mostrarToast(mensagem, tipo = 'success') {
             // Remover toast existente se houver
             const toastExistente = document.querySelector('.toast-landing');
@@ -1508,7 +1532,7 @@
             }, 3000);
         }
 
-        // AnimaÃ§Ã£o simples ao scroll
+        // Animação simples ao scroll
         window.addEventListener('scroll', () => {
             const cards = document.querySelectorAll('.movel-card, .material-card');
             cards.forEach(card => {
@@ -1522,35 +1546,23 @@
             });
         });
 
-        // Inicializar animaÃ§Ãµes
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.movel-card, .material-card');
-            cards.forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                card.style.transition = 'opacity 0.6s, transform 0.6s';
-            });
-        });
-
+        // ✅ FUNÇÃO CORRIGIDA: carregarMoveis
         async function carregarMoveis() {
             try {
-                console.log('ðŸ”„ Carregando mÃ³veis da API...');
+                console.log('📦 Carregando móveis da API...');
 
-                // Fazer requisiÃ§Ã£o para a API
-                const response = await fetch('http://localhost:8000/api/moveis/destaques');
+                const response = await fetch(`${API_BASE}/api/moveis/destaques`);
                 const data = await response.json();
 
                 if (data.success && data.moveis && data.moveis.length > 0) {
-                    console.log('âœ… MÃ³veis carregados:', data.moveis);
+                    console.log('✅ Móveis carregados:', data.moveis);
                     renderizarMoveis(data.moveis);
                 } else {
-                    console.log('âš ï¸ Nenhum mÃ³vel encontrado, mantendo layout estÃ¡tico');
-                    // MantÃ©m os cards estÃ¡ticos se nÃ£o houver dados
+                    console.log('⚠️ Nenhum móvel encontrado, mantendo layout estático');
                 }
 
             } catch (error) {
-                console.error('âŒ Erro ao carregar mÃ³veis:', error);
-                // Em caso de erro, mantÃ©m layout estÃ¡tico
+                console.error('❌ Erro ao carregar móveis:', error);
             }
         }
 
@@ -1558,7 +1570,7 @@
             const moveisGrid = document.querySelector('.moveis-grid');
 
             if (!moveisGrid) {
-                console.error('âŒ Container .moveis-grid nÃ£o encontrado');
+                console.error('❌ Container .moveis-grid não encontrado');
                 return;
             }
 
@@ -1571,10 +1583,10 @@
                 moveisGrid.appendChild(card);
             });
 
-            console.log(`âœ… ${moveis.length} mÃ³veis renderizados`);
+            console.log(`✅ ${moveis.length} móveis renderizados`);
         }
 
-        // FunÃ§Ã£o para fechar modal clicando no overlay
+        // Função para fechar modal clicando no overlay
         function configurarModalClickOutside() {
             const modal = document.getElementById('modalDetalhes');
             modal.addEventListener('click', function(e) {
@@ -1584,7 +1596,7 @@
             });
         }
 
-        // FunÃ§Ã£o para fechar modal com ESC
+        // Função para fechar modal com ESC
         function configurarModalEsc() {
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && document.getElementById('modalDetalhes').style.display === 'flex') {
@@ -1592,9 +1604,8 @@
                 }
             });
         }
-        let movelAtualModal = null;
 
-        // FunÃ§Ã£o para abrir modal com detalhes do mÃ³vel
+        // Função para abrir modal com detalhes do móvel
         function abrirModalDetalhes(movel) {
             console.log('🔍 Abrindo modal para:', movel.nome);
 
@@ -1632,6 +1643,8 @@
 
             console.log('✅ Modal aberto com sucesso!');
         }
+
+        // ✅ FUNÇÃO CORRIGIDA: configurarImagensCarousel
         function configurarImagensCarousel(movel) {
             const carouselContainer = document.getElementById('carouselContainer');
             const thumbnailsContainer = document.getElementById('thumbnailsContainer');
@@ -1640,34 +1653,34 @@
             // Preparar array de imagens
             imagensAtual = [];
 
-            console.log('ðŸ–¼ï¸ Verificando imagens do mÃ³vel...');
+            console.log('🖼️ Verificando imagens do móvel...');
 
-            // Se tem mÃºltiplas imagens
+            // Se tem múltiplas imagens
             if (movel.imagens && Array.isArray(movel.imagens) && movel.imagens.length > 0) {
                 imagensAtual = movel.imagens.map(img => ({
                     url: img.url,
                     alt: img.alt || `${movel.nome} - Imagem`,
                     principal: img.principal || false
                 }));
-                console.log(`âœ… Usando ${imagensAtual.length} imagens da tabela moveis_imagens`);
+                console.log(`✅ Usando ${imagensAtual.length} imagens da tabela moveis_imagens`);
             }
-            // Fallback para imagem Ãºnica
+            // Fallback para imagem única
             else if (movel.imagem_url) {
                 imagensAtual = [{
                     url: movel.imagem_url,
                     alt: `${movel.nome} - Imagem Principal`,
                     principal: true
                 }];
-                console.log('ðŸ“· Usando imagem Ãºnica (fallback)');
+                console.log('🖼️ Usando imagem única (fallback)');
             }
-            // Ãšltimo recurso: placeholder
+            // Último recurso: placeholder
             else {
                 imagensAtual = [{
                     url: 'placeholder',
                     alt: `${movel.nome} - Sem Imagem`,
                     principal: true
                 }];
-                console.log('ðŸ“· Usando placeholder');
+                console.log('🖼️ Usando placeholder');
             }
 
             // Resetar index
@@ -1678,19 +1691,19 @@
             if (thumbnailsContainer) thumbnailsContainer.innerHTML = '';
             if (indicatorsContainer) indicatorsContainer.innerHTML = '';
 
-            // âœ… CONFIGURAÃ‡ÃƒO CORRIGIDA DO CONTAINER
+            // ✅ CONFIGURAÇÃO CORRIGIDA DO CONTAINER
             carouselContainer.style.display = 'flex';
             carouselContainer.style.width = `${imagensAtual.length * 100}%`; // Container total largo
             carouselContainer.style.height = '100%';
             carouselContainer.style.transition = 'transform 0.3s ease';
 
-            // âœ… CRIAR IMAGENS COM DIMENSÃ•ES CORRETAS
+            // ✅ CRIAR IMAGENS COM DIMENSÕES CORRETAS
             imagensAtual.forEach((imagemObj, index) => {
                 const img = document.createElement('img');
                 img.className = 'carousel-image';
                 img.alt = imagemObj.alt;
 
-                // âœ… CORREÃ‡ÃƒO CRÃTICA: Cada imagem ocupa uma fraÃ§Ã£o do container total
+                // ✅ CORREÇÃO CRÍTICA: Cada imagem ocupa uma fração do container total
                 img.style.width = `${100 / imagensAtual.length}%`;
                 img.style.height = '100%';
                 img.style.objectFit = 'contain';
@@ -1700,35 +1713,37 @@
                 if (imagemObj.url === 'placeholder') {
                     img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0OCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfmrzwn6G0PC90ZXh0Pjwvc3ZnPg==';
                 } else {
-                    img.src = `http://localhost:8000/${imagemObj.url}`;
+                    // ✅ CORREÇÃO CRÍTICA: URL dinâmica
+                    img.src = `${API_BASE}/${imagemObj.url}`;
 
                     img.onerror = function() {
-                        console.log(`âš ï¸ Erro ao carregar: ${imagemObj.url}`);
+                        console.log(`⚠️ Erro ao carregar: ${imagemObj.url}`);
                         this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0OCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfmrzwn6G0PC90ZXh0Pjwvc3ZnPg==';
                     };
 
                     img.onload = function() {
-                        console.log(`âœ… Imagem carregada: ${imagemObj.url}`);
+                        console.log(`✅ Imagem carregada: ${imagemObj.url}`);
                     };
                 }
 
                 carouselContainer.appendChild(img);
             });
 
-            // Se tem mÃºltiplas imagens, mostrar controles
+            // Se tem múltiplas imagens, mostrar controles
             if (imagensAtual.length > 1) {
                 criarIndicadores();
                 criarThumbnails(movel.nome);
                 mostrarControlesCarousel(true);
-                console.log(`ðŸŽ›ï¸ Controles ativados para ${imagensAtual.length} imagens`);
+                console.log(`🎛️ Controles ativados para ${imagensAtual.length} imagens`);
             } else {
                 mostrarControlesCarousel(false);
-                console.log('ðŸŽ›ï¸ Controles desativados (apenas 1 imagem)');
+                console.log('🎛️ Controles desativados (apenas 1 imagem)');
             }
 
             // Posicionar no primeiro item
             atualizarPosicaoCarousel();
         }
+
         function criarIndicadores() {
             const indicatorsContainer = document.getElementById('carouselIndicators');
             if (!indicatorsContainer) return;
@@ -1774,7 +1789,8 @@
                     if (imagemObj.url === 'placeholder') {
                         thumbnail.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn5q88J+htDwvdGV4dD48L3N2Zz4=';
                     } else {
-                        thumbnail.src = `http://localhost:8000/${imagemObj.url}`;
+                        // ✅ CORREÇÃO CRÍTICA: URL dinâmica para thumbnails
+                        thumbnail.src = `${API_BASE}/${imagemObj.url}`;
                     }
 
                     thumbnail.onclick = () => irParaImagem(index);
@@ -1936,9 +1952,9 @@
             }
         }
 
-        // FUNÇÃO ATUALIZADA: Criar card com botões inteligentes
+        // ✅ FUNÇÃO CORRIGIDA: Criar card com botões inteligentes
         function criarCardMovel(movel) {
-           const card = document.createElement('div');
+            const card = document.createElement('div');
             const imageContainer = document.createElement('div');
             const content = document.createElement('div');
             const title = document.createElement('h3');
@@ -1996,8 +2012,8 @@
                     `;
                 };
 
-                // 5. Iniciar carregamento
-                image.src = `http://localhost:8000/${movel.imagem_url}`;
+                // ✅ CORREÇÃO CRÍTICA: URL dinâmica
+                image.src = `${API_BASE}/${movel.imagem_url}`;
 
             } else {
                 // Sem URL de imagem - mostrar emoji direto
@@ -2066,11 +2082,6 @@
 
             return card;
         }
-            // Inicializar modal quando DOM carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            configurarModalClickOutside();
-            configurarModalEsc();
-        });
 
         function getEmojiPorTipo(nomeMovel) {
             const nome = nomeMovel.toLowerCase();
@@ -2086,9 +2097,10 @@
             return '🪑'; // emoji padrão
         }
 
+        // ✅ FUNÇÃO CORRIGIDA: carregarInfoEmpresa
         async function carregarInfoEmpresa() {
             try {
-                const response = await fetch('http://localhost:8000/api/info/empresa');
+                const response = await fetch(`${API_BASE}/api/info/empresa`);
                 const data = await response.json();
 
                 if (data.success && data.informacao) {
@@ -2125,8 +2137,8 @@
 
                     console.log(`🔍 Item ${index}: ícone=${iconeDiv?.textContent}, texto=${textoDiv?.textContent?.substring(0, 50)}...`);
 
-                    // Procurar pelo ícone de localização 📍
-                    if (iconeDiv && iconeDiv.textContent.includes('📍') && textoDiv) {
+                    // Procurar pelo ícone de localização 🗺️
+                    if (iconeDiv && iconeDiv.textContent.includes('🗺️') && textoDiv) {
                         console.log('🎯 Encontrou item de endereço, atualizando...');
                         textoDiv.innerHTML = `
                             <strong>Endereço:</strong><br>
@@ -2137,8 +2149,8 @@
                         console.log('✅ Endereço atualizado na seção de contato');
                     }
 
-                    // Procurar pelo ícone de telefone 📱
-                    if (iconeDiv && iconeDiv.textContent.includes('📱') && textoDiv && info.contato) {
+                    // Procurar pelo ícone de telefone 📞
+                    if (iconeDiv && iconeDiv.textContent.includes('📞') && textoDiv && info.contato) {
                         console.log('🎯 Encontrou item de telefone, atualizando...');
                         // Formatar telefone: 22997380687 -> (22) 99738-0687
                         const whats = info.contato.whatsapp;
@@ -2197,7 +2209,7 @@
             if (info.endereco) {
                 const footerTextos = document.querySelectorAll('.footer-section p');
                 footerTextos.forEach(p => {
-                    if (p.textContent.includes('Araruama, RJ')) {
+                    if (p.textContent.includes('Armação dos Búzios, RJ')) {
                         p.innerHTML = `📍 ${info.endereco.cidade}, ${info.endereco.estado}`;
                         console.log('✅ Localização no footer atualizada');
                     }
@@ -2221,7 +2233,7 @@
             if (info.contato && info.contato.email) {
                 const footerTextos = document.querySelectorAll('.footer-section p');
                 footerTextos.forEach(p => {
-                    if (p.textContent.includes('contato@moveisartesanais.com')) {
+                    if (p.textContent.includes('weslleymartha@gmail.com')) {
                         p.innerHTML = `📧 ${info.contato.email}`;
                         console.log(`✅ Email no footer atualizado: ${info.contato.email}`);
                     }
@@ -2240,8 +2252,13 @@
             console.log('✅ Processamento completo das informações da empresa!');
         }
 
+        // ✅ INICIALIZAÇÃO CORRIGIDA
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Iniciando carregamento de dados...');
+
+            // Configurar eventos do modal
+            configurarModalClickOutside();
+            configurarModalEsc();
 
             // Carregar dados da API
             carregarMoveis();
@@ -2256,11 +2273,13 @@
             });
         });
 
+        // ✅ FUNÇÃO DE TESTE CORRIGIDA
         async function testarAPI() {
             try {
                 console.log('🧪 Testando conexão com API...');
+                console.log(`🔗 Usando URL base: ${API_BASE}`);
 
-                const response = await fetch('http://localhost:8000/api/moveis/destaques');
+                const response = await fetch(`${API_BASE}/api/moveis/destaques`);
                 const data = await response.json();
 
                 console.log('📊 Resposta da API:', data);
@@ -2272,8 +2291,9 @@
                 return null;
             }
         }
-        window.testarAPI = testarAPI;
 
+        // Expor função de teste globalmente
+        window.testarAPI = testarAPI;
     </script>
 </body>
 </html>
