@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: meu-ecommerce
+    name: lending-page-samrone
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python lending_page_samrone/app/server.py
+    startCommand: python app/server.py
