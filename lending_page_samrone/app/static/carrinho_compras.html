@@ -1,1 +1,1162 @@
-a
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - Samarone MÃ³veis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rich-black: #101820;
+            --vivid-yellow: #FEE715;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--rich-black);
+            background-color: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--rich-black);
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--vivid-yellow);
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-voltar {
+            background: transparent;
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--white);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-voltar:hover {
+            background: var(--white);
+            color: var(--rich-black);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--rich-black);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--vivid-yellow);
+            border-radius: 2px;
+        }
+
+        /* Carrinho Grid */
+        .carrinho-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        /* Lista de Itens */
+        .itens-carrinho {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .carrinho-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .carrinho-header h2 {
+            color: var(--rich-black);
+            font-size: 1.5rem;
+        }
+
+        .limpar-carrinho {
+            background: var(--danger-red);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .limpar-carrinho:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* Item do Carrinho */
+        .item-carrinho {
+            display: grid;
+            grid-template-columns: 100px 1fr auto auto;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+        }
+
+        .item-carrinho:hover {
+            background: var(--light-gray);
+            margin: 0 -1rem;
+            padding: 1.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        .item-carrinho:last-child {
+            border-bottom: none;
+        }
+
+        .item-imagem {
+            width: 100px;
+            height: 80px;
+            background: var(--light-gray);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-imagem.placeholder {
+            font-size: 2rem;
+            color: var(--rich-black);
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .item-nome {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--rich-black);
+        }
+
+        .item-materiais {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .item-preco-unit {
+            color: var(--rich-black);
+            font-weight: bold;
+        }
+
+        /* Controles de Quantidade */
+        .quantidade-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--light-gray);
+            border-radius: 25px;
+            padding: 0.2rem;
+        }
+
+        .qty-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            background: #e6d014;
+            transform: scale(1.1);
+        }
+
+        .qty-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .qty-input {
+            width: 50px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--rich-black);
+        }
+
+        /* PreÃ§o do Item */
+        .item-preco {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .preco-total-item {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--rich-black);
+        }
+
+        .btn-remover {
+            background: var(--danger-red);
+            color: var(--white);
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .btn-remover:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* Resumo do Pedido */
+        .resumo-pedido {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .resumo-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .resumo-header h3 {
+            color: var(--rich-black);
+            font-size: 1.4rem;
+        }
+
+        .resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .resumo-linha:last-child {
+            border-bottom: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--light-gray);
+        }
+
+        .resumo-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .resumo-valor {
+            font-weight: bold;
+            color: var(--rich-black);
+        }
+
+        .total-final {
+            font-size: 1.3rem;
+            color: var(--vivid-yellow);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* BotÃµes de AÃ§Ã£o */
+        .acoes-carrinho {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn-finalizar {
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+
+        .btn-finalizar:hover {
+            background: #e6d014;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(254, 231, 21, 0.3);
+        }
+
+        .btn-finalizar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-continuar {
+            background: transparent;
+            color: var(--rich-black);
+            padding: 1rem 2rem;
+            border: 2px solid var(--rich-black);
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+
+        .btn-continuar:hover {
+            background: var(--rich-black);
+            color: var(--white);
+        }
+
+        /* Carrinho Vazio */
+        .carrinho-vazio {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            grid-column: 1 / -1;
+        }
+
+        .carrinho-vazio .icone {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .carrinho-vazio h3 {
+            color: var(--rich-black);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .carrinho-vazio p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Badges e Indicadores */
+        .badge-quantidade {
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            margin-left: 0.5rem;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .loading::before {
+            content: 'â³';
+            font-size: 2rem;
+            margin-right: 1rem;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .carrinho-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .resumo-pedido {
+                position: relative;
+                top: auto;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .item-carrinho {
+                grid-template-columns: 80px 1fr;
+                gap: 1rem;
+            }
+
+            .item-preco {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 1rem;
+            }
+
+            .quantidade-controls {
+                order: -1;
+            }
+
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .nav-actions {
+                gap: 0.5rem;
+            }
+
+            .btn-voltar {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* AnimaÃ§Ãµes */
+        .item-carrinho {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .item-removido {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+
+        @keyframes slideOut {
+            to {
+                opacity: 0;
+                transform: translateX(-100%);
+                height: 0;
+                padding: 0;
+                margin: 0;
+            }
+        }
+
+        /* Toast/Notification */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--success-green);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: var(--danger-red);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="index.html" class="logo">ðŸ”¨ Samarone MÃ³veis</a>
+            <div class="nav-actions">
+                <span id="totalItens" class="badge-quantidade">0 itens</span>
+                <a href="index.html" class="btn-voltar">â† Continuar Comprando</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1 class="page-title">ðŸ›’ Seu Carrinho</h1>
+
+        <!-- Loading State -->
+        <div id="loadingCarrinho" class="loading">
+            Carregando carrinho...
+        </div>
+
+        <!-- Carrinho Container -->
+        <div id="carrinhoContainer" class="carrinho-container" style="display: none;">
+            <!-- Lista de Itens -->
+            <div class="itens-carrinho">
+                <div class="carrinho-header">
+                    <h2>Itens Selecionados</h2>
+                    <button class="limpar-carrinho" onclick="limparCarrinho()">ðŸ—‘ï¸ Limpar Tudo</button>
+                </div>
+
+                <div id="listaItens">
+                    <!-- Itens serÃ£o inseridos aqui dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Resumo do Pedido -->
+            <div class="resumo-pedido">
+                <div class="resumo-header">
+                    <h3>ðŸ“‹ Resumo do Pedido</h3>
+                </div>
+
+                <div class="resumo-linha">
+                    <span class="resumo-label">Subtotal:</span>
+                    <span class="resumo-valor" id="subtotalCarrinho">R$ 0,00</span>
+                </div>
+
+                <div class="resumo-linha">
+                    <span class="resumo-label">Taxa de Entrega:</span>
+                    <span class="resumo-valor" id="taxaEntrega">A calcular</span>
+                </div>
+
+                <div class="resumo-linha">
+                    <span class="resumo-label">Desconto:</span>
+                    <span class="resumo-valor" id="descontoCarrinho">R$ 0,00</span>
+                </div>
+
+                <div class="resumo-linha">
+                    <span class="resumo-label">Total:</span>
+                    <span class="resumo-valor total-final" id="totalCarrinho">R$ 0,00</span>
+                </div>
+
+                <div class="acoes-carrinho">
+                    <button class="btn-finalizar" id="btnFinalizar" onclick="finalizarCompra()">
+                        ðŸ’³ Finalizar Compra
+                    </button>
+                    <a href="index.html" class="btn-continuar">
+                        â† Continuar Comprando
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carrinho Vazio -->
+        <div id="carrinhoVazio" class="carrinho-vazio" style="display: none;">
+            <div class="icone">ðŸ›’</div>
+            <h3>Seu carrinho estÃ¡ vazio</h3>
+            <p>Adicione produtos incrÃ­veis para comeÃ§ar sua compra!</p>
+            <a href="index.html" class="btn-finalizar">ðŸ  Ver Nossos MÃ³veis</a>
+        </div>
+    </div>
+
+    <!-- Toast para notificaÃ§Ãµes -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // ðŸ”§ VARIÃVEIS GLOBAIS
+        let carrinho = [];
+        let carrinhoId = null; // Para backend
+
+        // ðŸŽ¯ TODO: Substituir por dados reais da API
+        const TAXA_ENTREGA = 0; // Por enquanto grÃ¡tis
+
+        // ðŸš€ INICIALIZAÃ‡ÃƒO
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('ðŸ›’ Inicializando carrinho...');
+            carregarCarrinho();
+        });
+
+        // ðŸ“¦ FUNÃ‡Ã•ES PRINCIPAIS (PRONTAS PARA BACKEND)
+
+        /**
+         * ðŸ”— TODO: Conectar com backend
+         * Carrega itens do carrinho da API
+         */
+        async function carregarCarrinho() {
+            try {
+                mostrarLoading(true);
+
+                // TODO: Substituir por chamada real da API
+                // const response = await fetch('/api/carrinho', {
+                //     method: 'GET',
+                //     headers: { 'Content-Type': 'application/json' }
+                // });
+                // const data = await response.json();
+                // carrinho = data.itens || [];
+
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Carregar do localStorage por enquanto
+                const carrinhoLocal = localStorage.getItem('carrinho_samarone');
+                if (carrinhoLocal) {
+                    carrinho = JSON.parse(carrinhoLocal);
+                    console.log('ðŸ“± Carrinho carregado do localStorage:', carrinho);
+                } else {
+                    carrinho = [];
+                }
+
+                setTimeout(() => {
+                    mostrarLoading(false);
+                    renderizarCarrinho();
+                }, 800); // Simular loading
+
+            } catch (error) {
+                console.error('âŒ Erro ao carregar carrinho:', error);
+                mostrarToast('Erro ao carregar carrinho', 'error');
+                mostrarLoading(false);
+                carrinho = [];
+                renderizarCarrinho();
+            }
+        }
+
+        /**
+         * ðŸ”— TODO: Conectar com backend
+         * Adiciona item ao carrinho
+         */
+        async function adicionarItem(movelId, quantidade = 1, movelData = null) {
+            try {
+                console.log(`âž• Adicionando item: ${movelId}, quantidade: ${quantidade}`);
+
+                // TODO: Fazer POST para API
+                // const response = await fetch('/api/carrinho/adicionar', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ movel_id: movelId, quantidade: quantidade })
+                // });
+
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Por enquanto, gerenciar localmente
+                const itemExistente = carrinho.find(item => item.movel_id === movelId);
+
+                if (itemExistente) {
+                    itemExistente.quantidade += quantidade;
+                } else {
+                    const novoItem = {
+                        id: Date.now(), // ID temporÃ¡rio
+                        movel_id: movelId,
+                        quantidade: quantidade,
+                        preco_unitario: movelData?.preco_atual || 0,
+                        nome: movelData?.nome || `MÃ³vel ${movelId}`,
+                        materiais: movelData?.materiais || 'Metalon + Madeira',
+                        imagem_url: movelData?.imagem_url || null
+                    };
+                    carrinho.push(novoItem);
+                }
+
+                salvarCarrinhoLocal();
+                renderizarCarrinho();
+                mostrarToast(`Item adicionado ao carrinho!`);
+
+                return true;
+
+            } catch (error) {
+                console.error('âŒ Erro ao adicionar item:', error);
+                mostrarToast('Erro ao adicionar item', 'error');
+                return false;
+            }
+        }
+
+        /**
+         * ðŸ”— TODO: Conectar com backend
+         * Remove item do carrinho
+         */
+        async function removerItem(itemId, movelId = null) {
+            try {
+                console.log(`ðŸ—‘ï¸ Removendo item: ${itemId}`);
+
+                // TODO: Fazer DELETE para API
+                // const response = await fetch(`/api/carrinho/remover/${itemId}`, {
+                //     method: 'DELETE'
+                // });
+
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Remover localmente
+                const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+                if (itemElement) {
+                    itemElement.classList.add('item-removido');
+
+                    setTimeout(() => {
+                        carrinho = carrinho.filter(item =>
+                            item.id !== itemId && item.movel_id !== movelId
+                        );
+                        salvarCarrinhoLocal();
+                        renderizarCarrinho();
+                        mostrarToast('Item removido do carrinho');
+                    }, 300);
+                }
+
+                return true;
+
+            } catch (error) {
+                console.error('âŒ Erro ao remover item:', error);
+                mostrarToast('Erro ao remover item', 'error');
+                return false;
+            }
+        }
+
+        /**
+         * ðŸ”— TODO: Conectar com backend
+         * Atualiza quantidade do item
+         */
+        async function atualizarQuantidade(itemId, novaQuantidade, movelId = null) {
+            try {
+                console.log(`ðŸ”„ Atualizando quantidade: ${itemId} -> ${novaQuantidade}`);
+
+                if (novaQuantidade <= 0) {
+                    return removerItem(itemId, movelId);
+                }
+
+                // TODO: Fazer PUT para API
+                // const response = await fetch(`/api/carrinho/atualizar/${itemId}`, {
+                //     method: 'PUT',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ quantidade: novaQuantidade })
+                // });
+
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Atualizar localmente
+                const item = carrinho.find(item =>
+                    item.id === itemId || item.movel_id === movelId
+                );
+
+                if (item) {
+                    item.quantidade = novaQuantidade;
+                    salvarCarrinhoLocal();
+                    renderizarCarrinho();
+                }
+
+                return true;
+
+            } catch (error) {
+                console.error('âŒ Erro ao atualizar quantidade:', error);
+                mostrarToast('Erro ao atualizar quantidade', 'error');
+                return false;
+            }
+        }
+
+        /**
+         * ðŸ”— TODO: Conectar com backend
+         * Limpa todo o carrinho
+         */
+        async function limparCarrinho() {
+            try {
+                const confirmacao = confirm('Tem certeza que deseja remover todos os itens do carrinho?');
+                if (!confirmacao) return;
+
+                console.log('ðŸ§¹ Limpando carrinho...');
+
+                // TODO: Fazer DELETE para API
+                // const response = await fetch('/api/carrinho/limpar', {
+                //     method: 'DELETE'
+                // });
+
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Limpar localmente
+                carrinho = [];
+                salvarCarrinhoLocal();
+                renderizarCarrinho();
+                mostrarToast('Carrinho limpo com sucesso!');
+
+            } catch (error) {
+                console.error('âŒ Erro ao limpar carrinho:', error);
+                mostrarToast('Erro ao limpar carrinho', 'error');
+            }
+        }
+
+        /**
+         * ðŸ”— TODO: Implementar redirect para formulÃ¡rio
+         * Finaliza compra e vai para formulÃ¡rio do cliente
+         */
+        function finalizarCompra() {
+            try {
+                if (carrinho.length === 0) {
+                    mostrarToast('Adicione itens ao carrinho primeiro!', 'error');
+                    return;
+                }
+
+                console.log('ðŸ’³ Finalizando compra...');
+                console.log('ðŸ“¦ Itens:', carrinho);
+                console.log('ðŸ’° Total:', calcularTotal());
+
+                // TODO: Passar dados para formulÃ¡rio do cliente
+                // OpÃ§Ã£o 1: Salvar no sessionStorage
+                sessionStorage.setItem('carrinho_checkout', JSON.stringify({
+                    itens: carrinho,
+                    subtotal: calcularSubtotal(),
+                    taxa_entrega: TAXA_ENTREGA,
+                    total: calcularTotal(),
+                    timestamp: new Date().toISOString()
+                }));
+
+                // TODO: Redirect para formulÃ¡rio
+                window.location.href = 'formulario_cliente.html';
+
+            } catch (error) {
+                console.error('âŒ Erro ao finalizar compra:', error);
+                mostrarToast('Erro ao finalizar compra', 'error');
+            }
+        }
+
+        // ðŸ“± FUNÃ‡Ã•ES DE INTERFACE
+
+        /**
+         * Renderiza todo o carrinho na tela
+         */
+        function renderizarCarrinho() {
+            const listaItens = document.getElementById('listaItens');
+            const carrinhoContainer = document.getElementById('carrinhoContainer');
+            const carrinhoVazio = document.getElementById('carrinhoVazio');
+
+            if (carrinho.length === 0) {
+                carrinhoContainer.style.display = 'none';
+                carrinhoVazio.style.display = 'block';
+                atualizarResumo();
+                return;
+            }
+
+            carrinhoContainer.style.display = 'grid';
+            carrinhoVazio.style.display = 'none';
+
+            listaItens.innerHTML = '';
+
+            carrinho.forEach(item => {
+                const itemElement = criarElementoItem(item);
+                listaItens.appendChild(itemElement);
+            });
+
+            atualizarResumo();
+            atualizarBadgeCarrinho();
+        }
+
+        /**
+         * Cria elemento HTML para um item do carrinho
+         */
+        function criarElementoItem(item) {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item-carrinho';
+            itemDiv.setAttribute('data-item-id', item.id);
+
+            const subtotalItem = item.preco_unitario * item.quantidade;
+
+            itemDiv.innerHTML = `
+                <div class="item-imagem ${item.imagem_url ? '' : 'placeholder'}">
+                    ${item.imagem_url ?
+                        `<img src="http://localhost:8000/${item.imagem_url}"
+                             alt="${item.nome}"
+                             onerror="this.parentElement.innerHTML='ðŸª‘'; this.parentElement.classList.add('placeholder');">`
+                        : getEmojiPorTipo(item.nome)
+                    }
+                </div>
+
+                <div class="item-info">
+                    <div class="item-nome">${item.nome}</div>
+                    <div class="item-materiais">${item.materiais}</div>
+                    <div class="item-preco-unit">R$ ${item.preco_unitario.toFixed(2).replace('.', ',')}</div>
+                </div>
+
+                <div class="quantidade-controls">
+                    <button class="qty-btn" onclick="alterarQuantidade(${item.id}, ${item.movel_id}, -1)"
+                            ${item.quantidade <= 1 ? 'disabled' : ''}>âˆ’</button>
+                    <input type="number" class="qty-input" value="${item.quantidade}"
+                           onchange="definirQuantidade(${item.id}, ${item.movel_id}, this.value)"
+                           min="1" max="99">
+                    <button class="qty-btn" onclick="alterarQuantidade(${item.id}, ${item.movel_id}, 1)">+</button>
+                </div>
+
+                <div class="item-preco">
+                    <div class="preco-total-item">R$ ${subtotalItem.toFixed(2).replace('.', ',')}</div>
+                    <button class="btn-remover" onclick="removerItem(${item.id}, ${item.movel_id})">
+                        ðŸ—‘ï¸ Remover
+                    </button>
+                </div>
+            `;
+
+            return itemDiv;
+        }
+
+        /**
+         * Altera quantidade usando botÃµes +/-
+         */
+        function alterarQuantidade(itemId, movelId, delta) {
+            const item = carrinho.find(i => i.id === itemId || i.movel_id === movelId);
+            if (item) {
+                const novaQuantidade = item.quantidade + delta;
+                atualizarQuantidade(itemId, novaQuantidade, movelId);
+            }
+        }
+
+        /**
+         * Define quantidade especÃ­fica via input
+         */
+        function definirQuantidade(itemId, movelId, novaQuantidade) {
+            const quantidade = parseInt(novaQuantidade) || 1;
+            atualizarQuantidade(itemId, Math.max(1, quantidade), movelId);
+        }
+
+        /**
+         * Atualiza resumo do pedido (valores)
+         */
+        function atualizarResumo() {
+            const subtotal = calcularSubtotal();
+            const desconto = calcularDesconto();
+            const total = calcularTotal();
+
+            document.getElementById('subtotalCarrinho').textContent = formatarPreco(subtotal);
+            document.getElementById('descontoCarrinho').textContent = formatarPreco(desconto);
+            document.getElementById('totalCarrinho').textContent = formatarPreco(total);
+            document.getElementById('taxaEntrega').textContent = TAXA_ENTREGA > 0 ? formatarPreco(TAXA_ENTREGA) : 'GrÃ¡tis';
+
+            // Habilitar/desabilitar botÃ£o finalizar
+            const btnFinalizar = document.getElementById('btnFinalizar');
+            btnFinalizar.disabled = carrinho.length === 0;
+        }
+
+        /**
+         * Atualiza badge de quantidade no header
+         */
+        function atualizarBadgeCarrinho() {
+            const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+            document.getElementById('totalItens').textContent = `${totalItens} ${totalItens === 1 ? 'item' : 'itens'}`;
+        }
+
+        // ðŸ’° FUNÃ‡Ã•ES DE CÃLCULO
+
+        function calcularSubtotal() {
+            return carrinho.reduce((total, item) => total + (item.preco_unitario * item.quantidade), 0);
+        }
+
+        function calcularDesconto() {
+            // TODO: Implementar lÃ³gica de desconto
+            const subtotal = calcularSubtotal();
+            if (subtotal > 1000) {
+                return subtotal * 0.05; // 5% de desconto acima de R$ 1000
+            }
+            return 0;
+        }
+
+        function calcularTotal() {
+            return calcularSubtotal() + TAXA_ENTREGA - calcularDesconto();
+        }
+
+        // ðŸ› ï¸ FUNÃ‡Ã•ES UTILITÃRIAS
+
+        function formatarPreco(valor) {
+            return `R$ ${valor.toFixed(2).replace('.', ',')}`;
+        }
+
+        function getEmojiPorTipo(nomeMovel) {
+            const nome = nomeMovel.toLowerCase();
+            if (nome.includes('mesa')) return 'ðŸª‘';
+            if (nome.includes('estante')) return 'ðŸ“š';
+            if (nome.includes('rack')) return 'ðŸ“º';
+            if (nome.includes('cadeira')) return 'ðŸª‘';
+            if (nome.includes('cama')) return 'ðŸ›ï¸';
+            if (nome.includes('armÃ¡rio')) return 'ðŸšª';
+            if (nome.includes('bancada')) return 'ðŸ”¨';
+            return 'ðŸª‘';
+        }
+
+        function mostrarLoading(mostrar) {
+            document.getElementById('loadingCarrinho').style.display = mostrar ? 'flex' : 'none';
+        }
+
+        function mostrarToast(mensagem, tipo = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensagem;
+            toast.className = `toast ${tipo}`;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        /**
+         * ðŸ’¾ Salva carrinho no localStorage (backup)
+         */
+        function salvarCarrinhoLocal() {
+            try {
+                localStorage.setItem('carrinho_samarone', JSON.stringify(carrinho));
+                console.log('ðŸ’¾ Carrinho salvo localmente');
+            } catch (error) {
+                console.error('âŒ Erro ao salvar carrinho:', error);
+            }
+        }
+
+        // ðŸ”— FUNÃ‡Ã•ES PÃšBLICAS (para serem chamadas de outras pÃ¡ginas)
+
+        /**
+         * FunÃ§Ã£o pÃºblica para adicionar ao carrinho (chamada da landing page)
+         */
+        window.adicionarAoCarrinho = function(movelData) {
+            return adicionarItem(movelData.id, 1, movelData);
+        };
+
+        /**
+         * FunÃ§Ã£o pÃºblica para obter total de itens
+         */
+        window.obterTotalItens = function() {
+            return carrinho.reduce((total, item) => total + item.quantidade, 0);
+        };
+
+        /**
+         * FunÃ§Ã£o pÃºblica para obter valor total
+         */
+        window.obterValorTotal = function() {
+            return calcularTotal();
+        };
+
+        // ðŸŽ¯ DADOS DEMO (remover quando conectar com backend)
+        function carregarDadosDemo() {
+            // Dados de exemplo para testar interface
+            carrinho = [
+                {
+                    id: 1,
+                    movel_id: 1,
+                    nome: "Mesa de Centro Industrial",
+                    materiais: "Metalon + Madeira de DemoliÃ§Ã£o",
+                    preco_unitario: 450.00,
+                    quantidade: 1,
+                    imagem_url: "static/images/moveis/mesa-centro.jpg"
+                },
+                {
+                    id: 2,
+                    movel_id: 2,
+                    nome: "Estante Suspensa",
+                    materiais: "Metalon + Madeira Tratada",
+                    preco_unitario: 680.00,
+                    quantidade: 2,
+                    imagem_url: null
+                }
+            ];
+
+            salvarCarrinhoLocal();
+            renderizarCarrinho();
+            console.log('ðŸŽ­ Dados demo carregados');
+        }
+
+        // ðŸ§ª FUNÃ‡ÃƒO PARA TESTAR (remover em produÃ§Ã£o)
+        function testarCarrinho() {
+            console.log('ðŸ§ª Testando carrinho...');
+            carregarDadosDemo();
+        }
+
+        // Disponibilizar funÃ§Ã£o de teste globalmente
+        window.testarCarrinho = testarCarrinho;
+
+        // ðŸ“± Event Listeners adicionais
+        window.addEventListener('beforeunload', function() {
+            // Salvar carrinho antes de sair da pÃ¡gina
+            salvarCarrinhoLocal();
+        });
+
+        // Detectar mudanÃ§as no localStorage (sincronizaÃ§Ã£o entre abas)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'carrinho_samarone') {
+                console.log('ðŸ”„ Carrinho atualizado em outra aba');
+                carrinho = JSON.parse(e.newValue || '[]');
+                renderizarCarrinho();
+            }
+        });
+
+        console.log('ðŸ›’ Carrinho inicializado! Use testarCarrinho() para testar com dados demo.');
+    </script>
+</body>
+</html>
