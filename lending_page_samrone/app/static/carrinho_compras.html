@@ -575,17 +575,17 @@
     <!-- Header -->
     <header class="header">
         <nav class="navbar">
-            <a href="index.html" class="logo">ðŸ”¨ Samarone MÃ³veis</a>
+            <a href="index.html" class="logo">Samarone Móveis</a>
             <div class="nav-actions">
                 <span id="totalItens" class="badge-quantidade">0 itens</span>
-                <a href="index.html" class="btn-voltar">â† Continuar Comprando</a>
+                <a href="index.html" class="btn-voltar">Continuar Comprando</a>
             </div>
         </nav>
     </header>
 
     <!-- Main Container -->
     <div class="container">
-        <h1 class="page-title">ðŸ›’ Seu Carrinho</h1>
+        <h1 class="page-title">Seu Carrinho</h1>
 
         <!-- Loading State -->
         <div id="loadingCarrinho" class="loading">
@@ -598,7 +598,7 @@
             <div class="itens-carrinho">
                 <div class="carrinho-header">
                     <h2>Itens Selecionados</h2>
-                    <button class="limpar-carrinho" onclick="limparCarrinho()">ðŸ—‘ï¸ Limpar Tudo</button>
+                    <button class="limpar-carrinho" onclick="limparCarrinho()">Limpar Tudo</button>
                 </div>
 
                 <div id="listaItens">
@@ -609,7 +609,7 @@
             <!-- Resumo do Pedido -->
             <div class="resumo-pedido">
                 <div class="resumo-header">
-                    <h3>ðŸ“‹ Resumo do Pedido</h3>
+                    <h3>Resumo do Pedido</h3>
                 </div>
 
                 <div class="resumo-linha">
@@ -634,10 +634,10 @@
 
                 <div class="acoes-carrinho">
                     <button class="btn-finalizar" id="btnFinalizar" onclick="finalizarCompra()">
-                        ðŸ’³ Finalizar Compra
+                        Finalizar Compra
                     </button>
                     <a href="index.html" class="btn-continuar">
-                        â† Continuar Comprando
+                        Continuar Comprando
                     </a>
                 </div>
             </div>
@@ -645,10 +645,10 @@
 
         <!-- Carrinho Vazio -->
         <div id="carrinhoVazio" class="carrinho-vazio" style="display: none;">
-            <div class="icone">ðŸ›’</div>
-            <h3>Seu carrinho estÃ¡ vazio</h3>
-            <p>Adicione produtos incrÃ­veis para comeÃ§ar sua compra!</p>
-            <a href="index.html" class="btn-finalizar">ðŸ  Ver Nossos MÃ³veis</a>
+            <div class="icone">🛒</div>
+            <h3>Seu carrinho está vazio</h3>
+            <p>Adicione produtos incríveis para começar sua compra!</p>
+            <a href="index.html" class="btn-finalizar">Ver Nossos Móveis</a>
         </div>
     </div>
 
@@ -661,7 +661,7 @@
         let carrinhoId = null; // Para backend
 
         // ðŸŽ¯ TODO: Substituir por dados reais da API
-        const TAXA_ENTREGA = 0; // Por enquanto grÃ¡tis
+        const TAXA_ENTREGA = 0; // Por enquanto Grátis
 
         // ðŸš€ INICIALIZAÃ‡ÃƒO
         document.addEventListener('DOMContentLoaded', function() {
@@ -953,7 +953,7 @@
 
                 <div class="quantidade-controls">
                     <button class="qty-btn" onclick="alterarQuantidade(${item.id}, ${item.movel_id}, -1)"
-                            ${item.quantidade <= 1 ? 'disabled' : ''}>âˆ’</button>
+                            ${item.quantidade <= 1 ? 'disabled' : ''}>-</button>
                     <input type="number" class="qty-input" value="${item.quantidade}"
                            onchange="definirQuantidade(${item.id}, ${item.movel_id}, this.value)"
                            min="1" max="99">
@@ -963,7 +963,7 @@
                 <div class="item-preco">
                     <div class="preco-total-item">R$ ${subtotalItem.toFixed(2).replace('.', ',')}</div>
                     <button class="btn-remover" onclick="removerItem(${item.id}, ${item.movel_id})">
-                        ðŸ—‘ï¸ Remover
+                        🗑️Remover
                     </button>
                 </div>
             `;
@@ -1001,7 +1001,7 @@
             document.getElementById('subtotalCarrinho').textContent = formatarPreco(subtotal);
             document.getElementById('descontoCarrinho').textContent = formatarPreco(desconto);
             document.getElementById('totalCarrinho').textContent = formatarPreco(total);
-            document.getElementById('taxaEntrega').textContent = TAXA_ENTREGA > 0 ? formatarPreco(TAXA_ENTREGA) : 'GrÃ¡tis';
+            document.getElementById('taxaEntrega').textContent = TAXA_ENTREGA > 0 ? formatarPreco(TAXA_ENTREGA) : 'Grátis';
 
             // Habilitar/desabilitar botÃ£o finalizar
             const btnFinalizar = document.getElementById('btnFinalizar');
