@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrinho de Compras - Samarone Móveis</title>
+    <title>Carrinho de Compras - Samarone MÃ³veis</title>
     <style>
         * {
             margin: 0;
@@ -266,7 +266,7 @@
             color: var(--rich-black);
         }
 
-        /* Preço do Item */
+        /* PreÃ§o do Item */
         .item-preco {
             display: flex;
             flex-direction: column;
@@ -350,7 +350,7 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* Botões de Ação */
+        /* BotÃµes de AÃ§Ã£o */
         .acoes-carrinho {
             margin-top: 2rem;
             display: flex;
@@ -452,7 +452,7 @@
         }
 
         .loading::before {
-            content: '⏳';
+            content: 'â³';
             font-size: 2rem;
             margin-right: 1rem;
             animation: spin 2s linear infinite;
@@ -517,7 +517,7 @@
             }
         }
 
-        /* Animações */
+        /* AnimaÃ§Ãµes */
         .item-carrinho {
             animation: slideIn 0.3s ease-out;
         }
@@ -575,17 +575,17 @@
     <!-- Header -->
     <header class="header">
         <nav class="navbar">
-            <a href="index.html" class="logo">🔨 Samarone Móveis</a>
+            <a href="index.html" class="logo">ðŸ”¨ Samarone MÃ³veis</a>
             <div class="nav-actions">
                 <span id="totalItens" class="badge-quantidade">0 itens</span>
-                <a href="index.html" class="btn-voltar">← Continuar Comprando</a>
+                <a href="index.html" class="btn-voltar">â† Continuar Comprando</a>
             </div>
         </nav>
     </header>
 
     <!-- Main Container -->
     <div class="container">
-        <h1 class="page-title">🛒 Seu Carrinho</h1>
+        <h1 class="page-title">ðŸ›’ Seu Carrinho</h1>
 
         <!-- Loading State -->
         <div id="loadingCarrinho" class="loading">
@@ -598,18 +598,18 @@
             <div class="itens-carrinho">
                 <div class="carrinho-header">
                     <h2>Itens Selecionados</h2>
-                    <button class="limpar-carrinho" onclick="limparCarrinho()">🗑️ Limpar Tudo</button>
+                    <button class="limpar-carrinho" onclick="limparCarrinho()">ðŸ—‘ï¸ Limpar Tudo</button>
                 </div>
 
                 <div id="listaItens">
-                    <!-- Itens serão inseridos aqui dinamicamente -->
+                    <!-- Itens serÃ£o inseridos aqui dinamicamente -->
                 </div>
             </div>
 
             <!-- Resumo do Pedido -->
             <div class="resumo-pedido">
                 <div class="resumo-header">
-                    <h3>📋 Resumo do Pedido</h3>
+                    <h3>ðŸ“‹ Resumo do Pedido</h3>
                 </div>
 
                 <div class="resumo-linha">
@@ -634,10 +634,10 @@
 
                 <div class="acoes-carrinho">
                     <button class="btn-finalizar" id="btnFinalizar" onclick="finalizarCompra()">
-                        💳 Finalizar Compra
+                        ðŸ’³ Finalizar Compra
                     </button>
                     <a href="index.html" class="btn-continuar">
-                        ← Continuar Comprando
+                        â† Continuar Comprando
                     </a>
                 </div>
             </div>
@@ -645,51 +645,34 @@
 
         <!-- Carrinho Vazio -->
         <div id="carrinhoVazio" class="carrinho-vazio" style="display: none;">
-            <div class="icone">🛒</div>
-            <h3>Seu carrinho está vazio</h3>
-            <p>Adicione produtos incríveis para começar sua compra!</p>
-            <a href="index.html" class="btn-finalizar">🏠 Ver Nossos Móveis</a>
+            <div class="icone">ðŸ›’</div>
+            <h3>Seu carrinho estÃ¡ vazio</h3>
+            <p>Adicione produtos incrÃ­veis para comeÃ§ar sua compra!</p>
+            <a href="index.html" class="btn-finalizar">ðŸ  Ver Nossos MÃ³veis</a>
         </div>
     </div>
 
-    <!-- Toast para notificações -->
+    <!-- Toast para notificaÃ§Ãµes -->
     <div id="toast" class="toast"></div>
 
     <script>
-
-        function getImageUrl(imagePath) {
-            if (!imagePath) return '';
-
-            const hostname = window.location.hostname;
-            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
-
-            if (isLocal) {
-                return `http://localhost:8000/${imagePath}`;
-            } else {
-                return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-            }
-        }
-
-        console.log(`🌍 Ambiente: ${window.location.hostname === 'localhost' ? 'LOCAL' : 'PRODUÇÃO'}`);
-
-
-        // 🔧 VARIÁVEIS GLOBAIS
+        // ðŸ”§ VARIÃVEIS GLOBAIS
         let carrinho = [];
         let carrinhoId = null; // Para backend
 
-        // 🎯 TODO: Substituir por dados reais da API
-        const TAXA_ENTREGA = 0; // Por enquanto grátis
+        // ðŸŽ¯ TODO: Substituir por dados reais da API
+        const TAXA_ENTREGA = 0; // Por enquanto grÃ¡tis
 
-        // 🚀 INICIALIZAÇÃO
+        // ðŸš€ INICIALIZAÃ‡ÃƒO
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🛒 Inicializando carrinho...');
+            console.log('ðŸ›’ Inicializando carrinho...');
             carregarCarrinho();
         });
 
-        // 📦 FUNÇÕES PRINCIPAIS (PRONTAS PARA BACKEND)
+        // ðŸ“¦ FUNÃ‡Ã•ES PRINCIPAIS (PRONTAS PARA BACKEND)
 
         /**
-         * 🔗 TODO: Conectar com backend
+         * ðŸ”— TODO: Conectar com backend
          * Carrega itens do carrinho da API
          */
         async function carregarCarrinho() {
@@ -704,11 +687,11 @@
                 // const data = await response.json();
                 // carrinho = data.itens || [];
 
-                // 🎭 SIMULAÇÃO: Carregar do localStorage por enquanto
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Carregar do localStorage por enquanto
                 const carrinhoLocal = localStorage.getItem('carrinho_samarone');
                 if (carrinhoLocal) {
                     carrinho = JSON.parse(carrinhoLocal);
-                    console.log('📱 Carrinho carregado do localStorage:', carrinho);
+                    console.log('ðŸ“± Carrinho carregado do localStorage:', carrinho);
                 } else {
                     carrinho = [];
                 }
@@ -719,7 +702,7 @@
                 }, 800); // Simular loading
 
             } catch (error) {
-                console.error('❌ Erro ao carregar carrinho:', error);
+                console.error('âŒ Erro ao carregar carrinho:', error);
                 mostrarToast('Erro ao carregar carrinho', 'error');
                 mostrarLoading(false);
                 carrinho = [];
@@ -728,12 +711,12 @@
         }
 
         /**
-         * 🔗 TODO: Conectar com backend
+         * ðŸ”— TODO: Conectar com backend
          * Adiciona item ao carrinho
          */
         async function adicionarItem(movelId, quantidade = 1, movelData = null) {
             try {
-                console.log(`➕ Adicionando item: ${movelId}, quantidade: ${quantidade}`);
+                console.log(`âž• Adicionando item: ${movelId}, quantidade: ${quantidade}`);
 
                 // TODO: Fazer POST para API
                 // const response = await fetch('/api/carrinho/adicionar', {
@@ -742,18 +725,18 @@
                 //     body: JSON.stringify({ movel_id: movelId, quantidade: quantidade })
                 // });
 
-                // 🎭 SIMULAÇÃO: Por enquanto, gerenciar localmente
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Por enquanto, gerenciar localmente
                 const itemExistente = carrinho.find(item => item.movel_id === movelId);
 
                 if (itemExistente) {
                     itemExistente.quantidade += quantidade;
                 } else {
                     const novoItem = {
-                        id: Date.now(), // ID temporário
+                        id: Date.now(), // ID temporÃ¡rio
                         movel_id: movelId,
                         quantidade: quantidade,
                         preco_unitario: movelData?.preco_atual || 0,
-                        nome: movelData?.nome || `Móvel ${movelId}`,
+                        nome: movelData?.nome || `MÃ³vel ${movelId}`,
                         materiais: movelData?.materiais || 'Metalon + Madeira',
                         imagem_url: movelData?.imagem_url || null
                     };
@@ -767,26 +750,26 @@
                 return true;
 
             } catch (error) {
-                console.error('❌ Erro ao adicionar item:', error);
+                console.error('âŒ Erro ao adicionar item:', error);
                 mostrarToast('Erro ao adicionar item', 'error');
                 return false;
             }
         }
 
         /**
-         * 🔗 TODO: Conectar com backend
+         * ðŸ”— TODO: Conectar com backend
          * Remove item do carrinho
          */
         async function removerItem(itemId, movelId = null) {
             try {
-                console.log(`🗑️ Removendo item: ${itemId}`);
+                console.log(`ðŸ—‘ï¸ Removendo item: ${itemId}`);
 
                 // TODO: Fazer DELETE para API
                 // const response = await fetch(`/api/carrinho/remover/${itemId}`, {
                 //     method: 'DELETE'
                 // });
 
-                // 🎭 SIMULAÇÃO: Remover localmente
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Remover localmente
                 const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
                 if (itemElement) {
                     itemElement.classList.add('item-removido');
@@ -804,19 +787,19 @@
                 return true;
 
             } catch (error) {
-                console.error('❌ Erro ao remover item:', error);
+                console.error('âŒ Erro ao remover item:', error);
                 mostrarToast('Erro ao remover item', 'error');
                 return false;
             }
         }
 
         /**
-         * 🔗 TODO: Conectar com backend
+         * ðŸ”— TODO: Conectar com backend
          * Atualiza quantidade do item
          */
         async function atualizarQuantidade(itemId, novaQuantidade, movelId = null) {
             try {
-                console.log(`🔄 Atualizando quantidade: ${itemId} -> ${novaQuantidade}`);
+                console.log(`ðŸ”„ Atualizando quantidade: ${itemId} -> ${novaQuantidade}`);
 
                 if (novaQuantidade <= 0) {
                     return removerItem(itemId, movelId);
@@ -829,7 +812,7 @@
                 //     body: JSON.stringify({ quantidade: novaQuantidade })
                 // });
 
-                // 🎭 SIMULAÇÃO: Atualizar localmente
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Atualizar localmente
                 const item = carrinho.find(item =>
                     item.id === itemId || item.movel_id === movelId
                 );
@@ -843,14 +826,14 @@
                 return true;
 
             } catch (error) {
-                console.error('❌ Erro ao atualizar quantidade:', error);
+                console.error('âŒ Erro ao atualizar quantidade:', error);
                 mostrarToast('Erro ao atualizar quantidade', 'error');
                 return false;
             }
         }
 
         /**
-         * 🔗 TODO: Conectar com backend
+         * ðŸ”— TODO: Conectar com backend
          * Limpa todo o carrinho
          */
         async function limparCarrinho() {
@@ -858,28 +841,28 @@
                 const confirmacao = confirm('Tem certeza que deseja remover todos os itens do carrinho?');
                 if (!confirmacao) return;
 
-                console.log('🧹 Limpando carrinho...');
+                console.log('ðŸ§¹ Limpando carrinho...');
 
                 // TODO: Fazer DELETE para API
                 // const response = await fetch('/api/carrinho/limpar', {
                 //     method: 'DELETE'
                 // });
 
-                // 🎭 SIMULAÇÃO: Limpar localmente
+                // ðŸŽ­ SIMULAÃ‡ÃƒO: Limpar localmente
                 carrinho = [];
                 salvarCarrinhoLocal();
                 renderizarCarrinho();
                 mostrarToast('Carrinho limpo com sucesso!');
 
             } catch (error) {
-                console.error('❌ Erro ao limpar carrinho:', error);
+                console.error('âŒ Erro ao limpar carrinho:', error);
                 mostrarToast('Erro ao limpar carrinho', 'error');
             }
         }
 
         /**
-         * 🔗 TODO: Implementar redirect para formulário
-         * Finaliza compra e vai para formulário do cliente
+         * ðŸ”— TODO: Implementar redirect para formulÃ¡rio
+         * Finaliza compra e vai para formulÃ¡rio do cliente
          */
         function finalizarCompra() {
             try {
@@ -888,12 +871,12 @@
                     return;
                 }
 
-                console.log('💳 Finalizando compra...');
-                console.log('📦 Itens:', carrinho);
-                console.log('💰 Total:', calcularTotal());
+                console.log('ðŸ’³ Finalizando compra...');
+                console.log('ðŸ“¦ Itens:', carrinho);
+                console.log('ðŸ’° Total:', calcularTotal());
 
-                // TODO: Passar dados para formulário do cliente
-                // Opção 1: Salvar no sessionStorage
+                // TODO: Passar dados para formulÃ¡rio do cliente
+                // OpÃ§Ã£o 1: Salvar no sessionStorage
                 sessionStorage.setItem('carrinho_checkout', JSON.stringify({
                     itens: carrinho,
                     subtotal: calcularSubtotal(),
@@ -902,16 +885,16 @@
                     timestamp: new Date().toISOString()
                 }));
 
-                // TODO: Redirect para formulário
+                // TODO: Redirect para formulÃ¡rio
                 window.location.href = 'formulario_cliente.html';
 
             } catch (error) {
-                console.error('❌ Erro ao finalizar compra:', error);
+                console.error('âŒ Erro ao finalizar compra:', error);
                 mostrarToast('Erro ao finalizar compra', 'error');
             }
         }
 
-        // 📱 FUNÇÕES DE INTERFACE
+        // ðŸ“± FUNÃ‡Ã•ES DE INTERFACE
 
         /**
          * Renderiza todo o carrinho na tela
@@ -955,9 +938,9 @@
             itemDiv.innerHTML = `
                 <div class="item-imagem ${item.imagem_url ? '' : 'placeholder'}">
                     ${item.imagem_url ?
-                        `<img src="${getImageUrl(item.imagem_url)}"
+                        `<img src="http://localhost:8000/${item.imagem_url}"
                              alt="${item.nome}"
-                             onerror="this.parentElement.innerHTML='🪑'; this.parentElement.classList.add('placeholder');">`
+                             onerror="this.parentElement.innerHTML='ðŸª‘'; this.parentElement.classList.add('placeholder');">`
                         : getEmojiPorTipo(item.nome)
                     }
                 </div>
@@ -970,7 +953,7 @@
 
                 <div class="quantidade-controls">
                     <button class="qty-btn" onclick="alterarQuantidade(${item.id}, ${item.movel_id}, -1)"
-                            ${item.quantidade <= 1 ? 'disabled' : ''}>−</button>
+                            ${item.quantidade <= 1 ? 'disabled' : ''}>âˆ’</button>
                     <input type="number" class="qty-input" value="${item.quantidade}"
                            onchange="definirQuantidade(${item.id}, ${item.movel_id}, this.value)"
                            min="1" max="99">
@@ -980,7 +963,7 @@
                 <div class="item-preco">
                     <div class="preco-total-item">R$ ${subtotalItem.toFixed(2).replace('.', ',')}</div>
                     <button class="btn-remover" onclick="removerItem(${item.id}, ${item.movel_id})">
-                        🗑️ Remover
+                        ðŸ—‘ï¸ Remover
                     </button>
                 </div>
             `;
@@ -989,7 +972,7 @@
         }
 
         /**
-         * Altera quantidade usando botões +/-
+         * Altera quantidade usando botÃµes +/-
          */
         function alterarQuantidade(itemId, movelId, delta) {
             const item = carrinho.find(i => i.id === itemId || i.movel_id === movelId);
@@ -1000,7 +983,7 @@
         }
 
         /**
-         * Define quantidade específica via input
+         * Define quantidade especÃ­fica via input
          */
         function definirQuantidade(itemId, movelId, novaQuantidade) {
             const quantidade = parseInt(novaQuantidade) || 1;
@@ -1018,9 +1001,9 @@
             document.getElementById('subtotalCarrinho').textContent = formatarPreco(subtotal);
             document.getElementById('descontoCarrinho').textContent = formatarPreco(desconto);
             document.getElementById('totalCarrinho').textContent = formatarPreco(total);
-            document.getElementById('taxaEntrega').textContent = TAXA_ENTREGA > 0 ? formatarPreco(TAXA_ENTREGA) : 'Grátis';
+            document.getElementById('taxaEntrega').textContent = TAXA_ENTREGA > 0 ? formatarPreco(TAXA_ENTREGA) : 'GrÃ¡tis';
 
-            // Habilitar/desabilitar botão finalizar
+            // Habilitar/desabilitar botÃ£o finalizar
             const btnFinalizar = document.getElementById('btnFinalizar');
             btnFinalizar.disabled = carrinho.length === 0;
         }
@@ -1033,14 +1016,14 @@
             document.getElementById('totalItens').textContent = `${totalItens} ${totalItens === 1 ? 'item' : 'itens'}`;
         }
 
-        // 💰 FUNÇÕES DE CÁLCULO
+        // ðŸ’° FUNÃ‡Ã•ES DE CÃLCULO
 
         function calcularSubtotal() {
             return carrinho.reduce((total, item) => total + (item.preco_unitario * item.quantidade), 0);
         }
 
         function calcularDesconto() {
-            // TODO: Implementar lógica de desconto
+            // TODO: Implementar lÃ³gica de desconto
             const subtotal = calcularSubtotal();
             if (subtotal > 1000) {
                 return subtotal * 0.05; // 5% de desconto acima de R$ 1000
@@ -1052,7 +1035,7 @@
             return calcularSubtotal() + TAXA_ENTREGA - calcularDesconto();
         }
 
-        // 🛠️ FUNÇÕES UTILITÁRIAS
+        // ðŸ› ï¸ FUNÃ‡Ã•ES UTILITÃRIAS
 
         function formatarPreco(valor) {
             return `R$ ${valor.toFixed(2).replace('.', ',')}`;
@@ -1060,14 +1043,14 @@
 
         function getEmojiPorTipo(nomeMovel) {
             const nome = nomeMovel.toLowerCase();
-            if (nome.includes('mesa')) return '🪑';
-            if (nome.includes('estante')) return '📚';
-            if (nome.includes('rack')) return '📺';
-            if (nome.includes('cadeira')) return '🪑';
-            if (nome.includes('cama')) return '🛏️';
-            if (nome.includes('armário')) return '🚪';
-            if (nome.includes('bancada')) return '🔨';
-            return '🪑';
+            if (nome.includes('mesa')) return 'ðŸª‘';
+            if (nome.includes('estante')) return 'ðŸ“š';
+            if (nome.includes('rack')) return 'ðŸ“º';
+            if (nome.includes('cadeira')) return 'ðŸª‘';
+            if (nome.includes('cama')) return 'ðŸ›ï¸';
+            if (nome.includes('armÃ¡rio')) return 'ðŸšª';
+            if (nome.includes('bancada')) return 'ðŸ”¨';
+            return 'ðŸª‘';
         }
 
         function mostrarLoading(mostrar) {
@@ -1086,41 +1069,41 @@
         }
 
         /**
-         * 💾 Salva carrinho no localStorage (backup)
+         * ðŸ’¾ Salva carrinho no localStorage (backup)
          */
         function salvarCarrinhoLocal() {
             try {
                 localStorage.setItem('carrinho_samarone', JSON.stringify(carrinho));
-                console.log('💾 Carrinho salvo localmente');
+                console.log('ðŸ’¾ Carrinho salvo localmente');
             } catch (error) {
-                console.error('❌ Erro ao salvar carrinho:', error);
+                console.error('âŒ Erro ao salvar carrinho:', error);
             }
         }
 
-        // 🔗 FUNÇÕES PÚBLICAS (para serem chamadas de outras páginas)
+        // ðŸ”— FUNÃ‡Ã•ES PÃšBLICAS (para serem chamadas de outras pÃ¡ginas)
 
         /**
-         * Função pública para adicionar ao carrinho (chamada da landing page)
+         * FunÃ§Ã£o pÃºblica para adicionar ao carrinho (chamada da landing page)
          */
         window.adicionarAoCarrinho = function(movelData) {
             return adicionarItem(movelData.id, 1, movelData);
         };
 
         /**
-         * Função pública para obter total de itens
+         * FunÃ§Ã£o pÃºblica para obter total de itens
          */
         window.obterTotalItens = function() {
             return carrinho.reduce((total, item) => total + item.quantidade, 0);
         };
 
         /**
-         * Função pública para obter valor total
+         * FunÃ§Ã£o pÃºblica para obter valor total
          */
         window.obterValorTotal = function() {
             return calcularTotal();
         };
 
-        // 🎯 DADOS DEMO (remover quando conectar com backend)
+        // ðŸŽ¯ DADOS DEMO (remover quando conectar com backend)
         function carregarDadosDemo() {
             // Dados de exemplo para testar interface
             carrinho = [
@@ -1128,7 +1111,7 @@
                     id: 1,
                     movel_id: 1,
                     nome: "Mesa de Centro Industrial",
-                    materiais: "Metalon + Madeira de Demolição",
+                    materiais: "Metalon + Madeira de DemoliÃ§Ã£o",
                     preco_unitario: 450.00,
                     quantidade: 1,
                     imagem_url: "static/images/moveis/mesa-centro.jpg"
@@ -1146,34 +1129,34 @@
 
             salvarCarrinhoLocal();
             renderizarCarrinho();
-            console.log('🎭 Dados demo carregados');
+            console.log('ðŸŽ­ Dados demo carregados');
         }
 
-        // 🧪 FUNÇÃO PARA TESTAR (remover em produção)
+        // ðŸ§ª FUNÃ‡ÃƒO PARA TESTAR (remover em produÃ§Ã£o)
         function testarCarrinho() {
-            console.log('🧪 Testando carrinho...');
+            console.log('ðŸ§ª Testando carrinho...');
             carregarDadosDemo();
         }
 
-        // Disponibilizar função de teste globalmente
+        // Disponibilizar funÃ§Ã£o de teste globalmente
         window.testarCarrinho = testarCarrinho;
 
-        // 📱 Event Listeners adicionais
+        // ðŸ“± Event Listeners adicionais
         window.addEventListener('beforeunload', function() {
-            // Salvar carrinho antes de sair da página
+            // Salvar carrinho antes de sair da pÃ¡gina
             salvarCarrinhoLocal();
         });
 
-        // Detectar mudanças no localStorage (sincronização entre abas)
+        // Detectar mudanÃ§as no localStorage (sincronizaÃ§Ã£o entre abas)
         window.addEventListener('storage', function(e) {
             if (e.key === 'carrinho_samarone') {
-                console.log('🔄 Carrinho atualizado em outra aba');
+                console.log('ðŸ”„ Carrinho atualizado em outra aba');
                 carrinho = JSON.parse(e.newValue || '[]');
                 renderizarCarrinho();
             }
         });
 
-        console.log('🛒 Carrinho inicializado! Use testarCarrinho() para testar com dados demo.');
+        console.log('ðŸ›’ Carrinho inicializado! Use testarCarrinho() para testar com dados demo.');
     </script>
 </body>
 </html>
