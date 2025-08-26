@@ -671,7 +671,7 @@
         <nav class="navbar">
             <a href="lending_page.html" class="logo">Samarone Móveis</a>
             <div class="nav-actions">
-                <a href="carrinho_compras.html" class="btn-voltar">â† Voltar ao Carrinho</a>
+                <a href="carrinho_compras.html" class="btn-voltar">Voltar ao Carrinho</a>
             </div>
         </nav>
     </header>
@@ -693,7 +693,7 @@
             </div>
             <div class="step">
                 <span>4</span>
-                <div class="step-label">ConfirmaÃ§Ã£o</div>
+                <div class="step-label">Confirmação</div>
             </div>
         </div>
     </div>
@@ -703,8 +703,8 @@
         <!-- FormulÃ¡rio -->
         <div class="formulario-container">
             <div class="form-header">
-                <h1 class="form-title">ðŸ“‹ Seus Dados</h1>
-                <p class="form-subtitle">Preencha suas informaÃ§Ãµes para finalizar o pedido</p>
+                <h1 class="form-title">🗃️ Seus Dados</h1>
+                <p class="form-subtitle">Preencha suas informações para finalizar o pedido</p>
             </div>
 
             <form id="formularioCliente" novalidate>
@@ -769,7 +769,7 @@
 
                 <!-- EndereÃ§o -->
                 <div class="endereco-section">
-                    <h3 class="endereco-title">ðŸ“ EndereÃ§o de Entrega</h3>
+                    <h3 class="endereco-title">EndereÃ§o de Entrega</h3>
 
                     <div class="form-grid">
                         <div class="form-group">
@@ -841,7 +841,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="numero" class="form-label required">NÃºmero</label>
+                            <label for="numero" class="form-label required">Número</label>
                             <div class="input-container">
                                 <input type="text"
                                        id="numero"
@@ -860,7 +860,7 @@
                                        id="complemento"
                                        name="complemento"
                                        class="form-input"
-                                       placeholder="Apartamento, bloco, referÃªncia... (opcional)">
+                                       placeholder="Apartamento, bloco, referência... (opcional)">
                                 <span class="input-icon" id="complementoIcon"></span>
                             </div>
                             <div class="validation-message" id="complementoMessage"></div>
@@ -871,7 +871,7 @@
                 <!-- BotÃµes de AÃ§Ã£o -->
                 <div class="form-actions">
                     <a href="carrinho_compras.html" class="btn btn-secondary">
-                        â† Voltar ao Carrinho
+                        Voltar ao Carrinho
                     </a>
                     <button type="submit" class="btn btn-primary" id="btnFinalizar" disabled>
                         <span id="btnTexto">Finalizar Pedido</span>
@@ -884,7 +884,7 @@
         <!-- Resumo do Pedido -->
         <div class="resumo-container">
             <div class="resumo-header">
-                <h3 class="resumo-title">ðŸ“¦ Resumo do Pedido</h3>
+                <h3 class="resumo-title">📝 Resumo do Pedido</h3>
             </div>
 
             <!-- Itens do Carrinho -->
@@ -960,7 +960,7 @@
 
                 if (checkoutData) {
                     dadosCheckout = JSON.parse(checkoutData);
-                    console.log('âœ… Dados do checkout carregados:', dadosCheckout);
+                    console.log('OK Dados do checkout carregados:', dadosCheckout);
                     renderizarResumo();
                 } else {
                     // Fallback: tentar carregar do localStorage
@@ -1025,7 +1025,7 @@
 
             // Atualizar valores
             document.getElementById('subtotal').textContent = formatarPreco(dadosCheckout.subtotal);
-            document.getElementById('taxaEntrega').textContent = dadosCheckout.taxa_entrega > 0 ? formatarPreco(dadosCheckout.taxa_entrega) : 'GrÃ¡tis';
+            document.getElementById('taxaEntrega').textContent = dadosCheckout.taxa_entrega > 0 ? formatarPreco(dadosCheckout.taxa_entrega) : 'Grátis';
             document.getElementById('desconto').textContent = formatarPreco(0);
             document.getElementById('total').textContent = formatarPreco(dadosCheckout.total);
         }
@@ -1080,7 +1080,7 @@
             });
         }
 
-        // âœ… CONFIGURAR VALIDAÃ‡Ã•ES
+        // OK CONFIGURAR VALIDAÃ‡Ã•ES
         function configurarValidacoes() {
             const campos = [
                 { id: 'nomeCompleto', validador: validarNome },
@@ -1135,7 +1135,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'Nome vÃ¡lido');
+            setValidationState(input, icon, message, true, 'Nome Válido');
             return true;
         }
 
@@ -1149,7 +1149,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'Telefone vÃ¡lido');
+            setValidationState(input, icon, message, true, 'Telefone Válido');
             return true;
         }
 
@@ -1165,7 +1165,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'E-mail vÃ¡lido');
+            setValidationState(input, icon, message, true, 'E-mail Válido');
             return true;
         }
 
@@ -1191,7 +1191,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'CPF vÃ¡lido');
+            setValidationState(input, icon, message, true, 'CPF Válido');
             return true;
         }
 
@@ -1225,7 +1225,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'CEP vÃ¡lido');
+            setValidationState(input, icon, message, true, 'CEP Válido');
             return true;
         }
 
@@ -1235,11 +1235,11 @@
             const message = document.getElementById('numeroMessage');
 
             if (valor.length === 0) {
-                setValidationState(input, icon, message, false, 'NÃºmero Ã© obrigatÃ³rio');
+                setValidationState(input, icon, message, false, 'Número é Obrigatório');
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'NÃºmero vÃ¡lido');
+            setValidationState(input, icon, message, true, 'Número Inválido');
             return true;
         }
 
@@ -1255,7 +1255,7 @@
 
             // ForÃ§a uppercase
             input.value = valor;
-            setValidationState(input, icon, message, true, 'Estado vÃ¡lido');
+            setValidationState(input, icon, message, true, 'Estado Válido');
             return true;
         }
 
@@ -1269,7 +1269,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'Cidade vÃ¡lida');
+            setValidationState(input, icon, message, true, 'Cidade válida');
             return true;
         }
 
@@ -1283,7 +1283,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'Bairro vÃ¡lido');
+            setValidationState(input, icon, message, true, 'Bairro Válido');
             return true;
         }
 
@@ -1297,7 +1297,7 @@
                 return false;
             }
 
-            setValidationState(input, icon, message, true, 'Rua vÃ¡lida');
+            setValidationState(input, icon, message, true, 'Rua válida');
             return true;
         }
 
@@ -1309,13 +1309,13 @@
             if (isValid) {
                 input.classList.add('valid');
                 icon.classList.add('valid');
-                icon.textContent = 'âœ“';
+                icon.textContent = 'OK';
                 message.classList.add('success');
                 message.textContent = text;
             } else {
                 input.classList.add('invalid');
                 icon.classList.add('invalid');
-                icon.textContent = 'âœ—';
+                icon.textContent = 'OK';
                 message.classList.add('error');
                 message.textContent = text;
             }
@@ -1344,7 +1344,7 @@
                     throw new Error('CEP nÃ£o encontrado');
                 }
 
-                console.log('âœ… CEP encontrado:', data);
+                console.log('OK CEP encontrado:', data);
 
                 // Preencher campos automaticamente
                 document.getElementById('estado').value = data.uf || '';
@@ -1395,7 +1395,7 @@
             }
         }
 
-        // âœ… VERIFICAR SE FORMULÃRIO ESTÃ COMPLETO
+        // OK VERIFICAR SE FORMULÃRIO ESTÃ COMPLETO
         function verificarFormularioCompleto() {
             const camposObrigatorios = [
                 'nomeCompleto', 'telefone', 'email', 'cpf',
@@ -1448,7 +1448,7 @@
                 console.log('ðŸ“¤ Enviando dados do cliente:', dadosCliente);
                 console.log('ðŸ“¦ Enviando itens do carrinho:', dadosCheckout.itens);
 
-                // âœ… CONEXÃƒO REAL COM A API
+                // OK CONEXÃƒO REAL COM A API
                 const response = await fetch(`${API_BASE}/api/pedidos/criar`, {
                     method: 'POST',
                     headers: {
@@ -1475,11 +1475,11 @@
                 console.log('ðŸ“¨ Resposta da API:', resultado);
 
                 if (resultado.success) {
-                    // âœ… SUCESSO - Pedido criado!
-                    console.log('ðŸŽ‰ Pedido criado com sucesso!');
-                    console.log(`ðŸ“¦ Pedido ID: ${resultado.pedido_id}`);
-                    console.log(`ðŸ‘¤ Cliente ID: ${resultado.cliente_id}`);
-                    console.log(`ðŸ’° Valor Total: R$ ${resultado.valor_total?.toFixed(2) || '0,00'}`);
+                    // OK SUCESSO - Pedido criado!
+                    console.log('Pedido criado com sucesso!');
+                    console.log(`Pedido ID: ${resultado.pedido_id}`);
+                    console.log(`Cliente ID: ${resultado.cliente_id}`);
+                    console.log(`Valor Total: R$ ${resultado.valor_total?.toFixed(2) || '0,00'}`);
 
                     // Limpar carrinho apÃ³s sucesso
                     localStorage.removeItem('carrinho_samarone');
@@ -1505,11 +1505,11 @@
                         // window.location.href = 'confirmacao.html';
 
                         // Por enquanto, mostrar alert de sucesso
-                        alert(`ðŸŽ‰ PEDIDO CRIADO COM SUCESSO!\n\n` +
-                              `ðŸ“¦ NÃºmero do Pedido: #${resultado.pedido_id}\n` +
-                              `ðŸ‘¤ Cliente: ${dadosCliente.nome_completo}\n` +
-                              `ðŸ’° Valor Total: R$ ${(resultado.valor_total || 0).toFixed(2).replace('.', ',')}\n` +
-                              `ðŸ“± Entraremos em contato via WhatsApp!`);
+                        alert(`PEDIDO CRIADO COM SUCESSO!\n\n` +
+                              ` Número do Pedido: #${resultado.pedido_id}\n` +
+                              ` Cliente: ${dadosCliente.nome_completo}\n` +
+                              ` Valor Total: R$ ${(resultado.valor_total || 0).toFixed(2).replace('.', ',')}\n` +
+                              ` Entraremos em contato via WhatsApp!`);
 
                         // Voltar para a landing page
                         window.location.href = '/';
