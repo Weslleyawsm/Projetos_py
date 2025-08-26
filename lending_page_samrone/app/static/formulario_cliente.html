@@ -931,6 +931,12 @@
     <div id="toast" class="toast"></div>
 
     <script>
+
+        const API_BASE = window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'
+                 ? 'http://localhost:8000'
+                 : window.location.origin;
+
         // ðŸ”§ VARIÃVEIS GLOBAIS
         let dadosCheckout = null;
         let formularioValido = false;
@@ -1443,7 +1449,7 @@
                 console.log('ðŸ“¦ Enviando itens do carrinho:', dadosCheckout.itens);
 
                 // âœ… CONEXÃƒO REAL COM A API
-                const response = await fetch('http://localhost:8000/api/pedidos/criar', {
+                const response = await fetch(`${API_BASE}/api/pedidos/criar`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
