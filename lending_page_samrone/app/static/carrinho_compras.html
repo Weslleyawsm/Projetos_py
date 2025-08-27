@@ -386,7 +386,7 @@
         }
 
         .btn-continuar {
-            background: transparent;
+            background: white;
             color: var(--rich-black);
             padding: 1rem 2rem;
             border: 2px solid var(--rich-black);
@@ -398,6 +398,7 @@
             text-decoration: none;
             text-align: center;
             display: block;
+            font-family: inherit; /* Herda a fonte do parent */
         }
 
         .btn-continuar:hover {
@@ -578,7 +579,7 @@
             <a href="index.html" class="logo">Samarone Móveis</a>
             <div class="nav-actions">
                 <span id="totalItens" class="badge-quantidade">0 itens</span>
-                <a href="index.html" class="btn-voltar">Continuar Comprando</a>
+                <button class="btn-continuar" onclick="voltarPaginaAnterior()">Continuar Comprando</button>
             </div>
         </nav>
     </header>
@@ -636,9 +637,7 @@
                     <button class="btn-finalizar" id="btnFinalizar" onclick="finalizarCompra()">
                         Finalizar Compra
                     </button>
-                    <a href="index.html" class="btn-continuar">
-                        Continuar Comprando
-                    </a>
+                    <button class="btn-continuar" onclick="voltarPaginaAnterior()">Continuar Comprando</button>
                 </div>
             </div>
         </div>
@@ -656,6 +655,16 @@
     <div id="toast" class="toast"></div>
 
     <script>
+        function voltarPaginaAnterior() {
+            // Se tem histórico, volta
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // Se não tem histórico (usuário veio direto), vai para index
+                window.location.href = '/';
+            }
+        }
+
         function getAPIBaseURL() {
             // Se estiver rodando localmente
             if (window.location.hostname === 'localhost' ||
