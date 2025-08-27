@@ -63,15 +63,16 @@
         }
 
         .btn-voltar {
-            background: transparent;
+            background: white;
             color: var(--white);
             padding: 0.5rem 1rem;
             border: 2px solid var(--white);
             border-radius: 25px;
-            text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
             font-size: 0.9rem;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .btn-voltar:hover {
@@ -671,7 +672,9 @@
         <nav class="navbar">
             <a href="lending_page.html" class="logo">Samarone Móveis</a>
             <div class="nav-actions">
-                <a href="carrinho_compras.html" class="btn-voltar">Voltar ao Carrinho</a>
+                <button class="btn btn-secondary" onclick="voltarPaginaAnterior()">
+                    Voltar ao Carrinho
+                </button>
             </div>
         </nav>
     </header>
@@ -931,6 +934,15 @@
     <div id="toast" class="toast"></div>
 
     <script>
+        function voltarPaginaAnterior() {
+            // Se tem histórico, volta
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // Se não tem histórico (usuário veio direto), vai para index
+                window.location.href = '/';
+            }
+        }
 
         const API_BASE = window.location.hostname === 'localhost' ||
                  window.location.hostname === '127.0.0.1'
