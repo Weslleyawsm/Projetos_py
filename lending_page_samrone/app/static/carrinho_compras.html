@@ -656,6 +656,22 @@
     <div id="toast" class="toast"></div>
 
     <script>
+        function getAPIBaseURL() {
+            // Se estiver rodando localmente
+            if (window.location.hostname === 'localhost' ||
+                window.location.hostname === '127.0.0.1') {
+                return 'http://localhost:8000';
+            }
+
+            // Se estiver no Render ou outro ambiente de produção
+            // Usar a mesma URL base do frontend
+            return window.location.origin;
+        }
+
+        // Configuração global - MUITO IMPORTANTE!
+        const API_BASE = getAPIBaseURL();
+        console.log(`API Base URL no carrinho: ${API_BASE}`);
+
         // ðŸ”§ VARIÃVEIS GLOBAIS
         let carrinho = [];
         let carrinhoId = null; // Para backend
@@ -938,7 +954,7 @@
             itemDiv.innerHTML = `
                 <div class="item-imagem ${item.imagem_url ? '' : 'placeholder'}">
                     ${item.imagem_url ?
-                        `<img src="http://localhost:8000/${item.imagem_url}"
+                        `<img src="${API_BASE}/${item.imagem_url}"
                              alt="${item.nome}"
                              onerror="this.parentElement.innerHTML='ðŸª‘'; this.parentElement.classList.add('placeholder');">`
                         : getEmojiPorTipo(item.nome)
