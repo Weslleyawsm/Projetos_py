@@ -579,7 +579,7 @@
             <a href="index.html" class="logo">Samarone Móveis</a>
             <div class="nav-actions">
                 <span id="totalItens" class="badge-quantidade">0 itens</span>
-                <button class="btn-continuar" onclick="voltarPaginaAnterior()">Continuar Comprando</button>
+                <button class="btn-continuar" onclick="continuarComprando()">Continuar Comprando</button>
             </div>
         </nav>
     </header>
@@ -637,7 +637,7 @@
                     <button class="btn-finalizar" id="btnFinalizar" onclick="finalizarCompra()">
                         Finalizar Compra
                     </button>
-                    <button class="btn-continuar" onclick="voltarPaginaAnterior()">Continuar Comprando</button>
+                    <button class="btn-continuar" onclick="continuarComprando()">Continuar Comprando</button>
                 </div>
             </div>
         </div>
@@ -655,6 +655,23 @@
     <div id="toast" class="toast"></div>
 
     <script>
+        function continuarComprando() {
+            // Sempre tentar usar o histórico primeiro (mantém o cache)
+            if (window.history.length > 1) {
+                // Verificar se a página anterior é o formulário
+                // Se for, pular o formulário e ir 2 páginas atrás
+                if (document.referrer && document.referrer.includes('formulario_cliente.html')) {
+                    // Ir 2 páginas atrás para pular o formulário
+                    window.history.go(-2);
+                } else {
+                    // Comportamento normal - volta 1 página
+                    window.history.back();
+                }
+            } else {
+                // Só como último recurso (usuário veio direto para o carrinho)
+                window.location.href = '/';
+            }
+        }
         function voltarPaginaAnterior() {
             // Se tem histórico, volta
             if (window.history.length > 1) {
