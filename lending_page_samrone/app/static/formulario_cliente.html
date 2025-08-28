@@ -63,16 +63,15 @@
         }
 
         .btn-voltar {
-            background: white;
+            background: transparent;
             color: var(--white);
             padding: 0.5rem 1rem;
             border: 2px solid var(--white);
             border-radius: 25px;
+            text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
             font-size: 0.9rem;
-            cursor: pointer;
-            font-family: inherit;
         }
 
         .btn-voltar:hover {
@@ -672,9 +671,7 @@
         <nav class="navbar">
             <a href="lending_page.html" class="logo">Samarone Móveis</a>
             <div class="nav-actions">
-                <button class="btn btn-secondary" onclick="voltarPaginaAnterior()">
-                    Voltar ao Carrinho
-                </button>
+                <a href="carrinho_compras.html" class="btn-voltar">Voltar ao Carrinho</a>
             </div>
         </nav>
     </header>
@@ -1493,12 +1490,9 @@
                     console.log(`Cliente ID: ${resultado.cliente_id}`);
                     console.log(`Valor Total: R$ ${resultado.valor_total?.toFixed(2) || '0,00'}`);
 
-                    // Limpar carrinho apÃ³s sucesso
-                    localStorage.removeItem('carrinho_samarone');
-                    sessionStorage.removeItem('carrinho_checkout');
 
-                    // Mostrar mensagem de sucesso
-                    mostrarToast(`Pedido #${resultado.pedido_id} criado com sucesso!`, 'success');
+                    // Mostrar mensagem de redirecionamento para o pagamento
+                    mostrarToast(`Pedido #${resultado.pedido_id} criado! Redirecionando para pagamento...`, 'success');
 
                     // Salvar dados do pedido para pÃ¡gina de confirmaÃ§Ã£o
                     sessionStorage.setItem('pedido_confirmacao', JSON.stringify({
@@ -1524,7 +1518,7 @@
                               ` Entraremos em contato via WhatsApp!`);
 
                         // Voltar para a landing page
-                        window.location.href = '/';
+                        window.location.href = `formulario_pagamento.html?pedido=${resultado.pedido_id}`;
                     }, 2000);
 
                 } else {
