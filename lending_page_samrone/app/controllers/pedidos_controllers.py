@@ -66,7 +66,7 @@ class PedidosController:
             pedido = Pedido.criar_pedido(
                 cliente_id=cliente.id,
                 valor_total=valor_total,
-                status="pendente",
+                status="pendente_pagamento",
                 observacoes="Pedido criado via site"
             )
 
@@ -202,7 +202,7 @@ class PedidosController:
 
                 itens = ItemPedido.buscar_por_pedido(item_object.id) #buscando itens por pedidos
 
-                pedido_dict['itens'] = [item.to_dict for item in itens] if itens else [] #adicionando a chave 'itens' ao dicionario e atribuindo valores a essa chave
+                pedido_dict['itens'] = [item.to_dict() for item in itens] if itens else [] #adicionando a chave 'itens' ao dicionario e atribuindo valores a essa chave
 
 
                 lista_pedidos_json.append(pedido_dict) #adicionndo os itens na lista de pedidos
@@ -238,9 +238,14 @@ class PedidosController:
             itens_pedido = ItemPedido.buscar_por_pedido(pedido_object.id)
 
             if itens_pedido:
-                pedido_dict['itens'] = [item.to_dict for item in itens_pedido]
+                pedido_dict['itens'] = [item.to_dict() for item in itens_pedido]
             else:
                 pedido_dict['itens'] = []
+
+            cliente = FormularioCliente.buscar_por_id(pedido_object.cliente_id)
+            if cliente:
+                cliente_object = FormularioCliente.criar_do_banco(cliente)
+                pedido_dict['cliente'] = cliente_object._to_dict()
 
             return {
                 'sucesso': True,
