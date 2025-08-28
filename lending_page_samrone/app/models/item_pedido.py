@@ -1,13 +1,14 @@
 from app.models.database import Database
 
 class ItemPedido:
-    def __init__(self, id, pedido_id, movel_id, quantidade, preco_unitario, subtotal):
+    def __init__(self, id, pedido_id, movel_id, quantidade, preco_unitario, subtotal, movel_nome = None):
         self.id = id
         self.pedido_id = pedido_id
         self.movel_id = movel_id
         self.quantidade = quantidade
         self.preco_unitario = preco_unitario
         self.subtotal = subtotal
+        self.movel_nome = movel_nome
 
     @classmethod
     def criar_do_banco(cls, dados):
@@ -17,7 +18,8 @@ class ItemPedido:
             movel_id = dados[2],
             quantidade = dados[3],
             preco_unitario = dados[4],
-            subtotal=dados[5]
+            subtotal=dados[5],
+            movel_nome = dados[6]
         )
 
     def to_dict(self):
@@ -27,7 +29,8 @@ class ItemPedido:
             'movel_id': self.movel_id,
             'quantidade': self.quantidade,
             'preco_unitario': float(self.preco_unitario) if self.preco_unitario else 0.0,  # ✅ CONVERSÃO
-            'subtotal': float(self.subtotal) if self.subtotal else 0.0  # ✅ CONVERSÃO
+            'subtotal': float(self.subtotal) if self.subtotal else 0.0, # ✅ CONVERSÃO
+            'movel_nome': self.movel_nome
         }
         return dados_item_pedido
 
@@ -56,12 +59,15 @@ class ItemPedido:
     def buscar_por_pedido(pedido_id):
         try:
             db = Database()
-            query_pedido = """SELECT * FROM itens_pedidos WHERE pedido_id = %s"""
+            query_pedido = """SELECT ip.*, m.nome as movel_nome 
+                            FROM itens_pedidos ip 
+                            JOIN moveis m ON ip.movel_id = m.id 
+                            WHERE ip.pedido_id = %s"""
             resultado = db.execute_query(query_pedido, params=(pedido_id,))
             if resultado:
                 print(f"=== ITENS DO PEDIDO {pedido_id} ===")
-                for id, pedido, movel_id, quantidade, preco_unitario, subtotal in resultado:
-                    print(f"ID {id} - Pedido {pedido:2} - Movel ID {movel_id:2} - Quantidade {quantidade:2} - Preço por Unidade {preco_unitario:8.2f} - Subtotal: {subtotal:8.2f}")
+                for id, pedido, movel_id, quantidade, preco_unitario, subtotal, nome_movel in resultado:
+                    print(f"ID {id} - Pedido {pedido:2} - Movel ID {movel_id:2} - Quantidade {quantidade:2} - Preço por Unidade {preco_unitario:8.2f} - Subtotal: {subtotal:8.2f} - Nome do Movel: {nome_movel}")
                 return [ItemPedido.criar_do_banco(item) for item in resultado]
             else:
                 print(f"Não foi possível encontrar o pedido!!")
