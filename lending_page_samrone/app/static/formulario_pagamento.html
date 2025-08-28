@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - Samarone Móveis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rich-black: #101820;
+            --vivid-yellow: #FEE715;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --success-green: #28a745;
+            --danger-red: #dc3545;
+            --warning-orange: #fd7e14;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--rich-black);
+            background: linear-gradient(135deg, var(--light-gray) 0%, #e8e8e8 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--rich-black);
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--vivid-yellow);
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-voltar {
+            background: transparent;
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--white);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-voltar:hover {
+            background: var(--white);
+            color: var(--rich-black);
+        }
+
+        /* Progress Steps */
+        .progress-container {
+            background: var(--white);
+            padding: 2rem 0;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .progress-steps {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--light-gray);
+            z-index: 1;
+        }
+
+        .progress-steps::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 75%;
+            height: 2px;
+            background: var(--vivid-yellow);
+            z-index: 2;
+            transition: width 0.3s ease;
+        }
+
+        .step {
+            background: var(--white);
+            border: 3px solid var(--light-gray);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 3;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            background: var(--success-green);
+            border-color: var(--success-green);
+            color: var(--white);
+        }
+
+        .step.active {
+            background: var(--vivid-yellow);
+            border-color: var(--vivid-yellow);
+            color: var(--rich-black);
+            transform: scale(1.1);
+        }
+
+        .step-label {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--rich-black);
+            white-space: nowrap;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        /* Resumo do Pedido */
+        .resumo-pedido {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            border: 1px solid #e0e0e0;
+        }
+
+        .resumo-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .resumo-title {
+            font-size: 1.5rem;
+            color: var(--rich-black);
+            margin-bottom: 0.5rem;
+        }
+
+        .pedido-numero {
+            color: var(--vivid-yellow);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Dados do Cliente */
+        .dados-cliente {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--light-gray);
+            border-radius: 15px;
+        }
+
+        .dados-cliente h4 {
+            color: var(--rich-black);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .cliente-info {
+            display: grid;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .cliente-info span {
+            color: #666;
+        }
+
+        .cliente-info strong {
+            color: var(--rich-black);
+        }
+
+        /* Itens do Pedido */
+        .itens-pedido {
+            margin-bottom: 2rem;
+        }
+
+        .item-pedido {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-nome {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--rich-black);
+            margin-bottom: 0.2rem;
+        }
+
+        .item-detalhes {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .item-preco {
+            font-weight: bold;
+            color: var(--rich-black);
+            font-size: 0.9rem;
+        }
+
+        /* Resumo Financeiro */
+        .resumo-financeiro {
+            border-top: 2px solid var(--light-gray);
+            padding-top: 1rem;
+        }
+
+        .resumo-linha {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .resumo-linha:last-child {
+            border-top: 1px solid var(--light-gray);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .resumo-label {
+            color: #666;
+        }
+
+        .resumo-valor {
+            font-weight: bold;
+            color: var(--rich-black);
+        }
+
+        .total-final {
+            color: var(--vivid-yellow);
+            font-size: 1.2rem;
+        }
+
+        /* Área de Pagamento */
+        .pagamento-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .pagamento-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .pagamento-title {
+            font-size: 1.5rem;
+            color: var(--rich-black);
+            margin-bottom: 0.5rem;
+        }
+
+        .pagamento-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Métodos de Pagamento */
+        .metodos-pagamento {
+            margin-bottom: 2rem;
+        }
+
+        .metodo-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .metodo-item:hover {
+            border-color: var(--vivid-yellow);
+            background: rgba(254, 231, 21, 0.05);
+        }
+
+        .metodo-item.selected {
+            border-color: var(--vivid-yellow);
+            background: rgba(254, 231, 21, 0.1);
+        }
+
+        .metodo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .metodo-info {
+            flex-grow: 1;
+        }
+
+        .metodo-nome {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--rich-black);
+            margin-bottom: 0.3rem;
+        }
+
+        .metodo-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .metodo-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .metodo-item.selected .metodo-radio {
+            border-color: var(--vivid-yellow);
+            background: var(--vivid-yellow);
+        }
+
+        .metodo-item.selected .metodo-radio::after {
+            content: '✓';
+            color: var(--rich-black);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* Área do Mercado Pago */
+        .mercadopago-container {
+            background: var(--light-gray);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .mercadopago-container.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mp-title {
+            color: var(--rich-black);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .mp-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Botões de Ação */
+        .acoes-pagamento {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: var(--vivid-yellow);
+            color: var(--rich-black);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #e6d014;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(254, 231, 21, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--rich-black);
+            border: 2px solid var(--rich-black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--rich-black);
+            color: var(--white);
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-content {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--light-gray);
+            border-top: 4px solid var(--vivid-yellow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.4s ease;
+            color: white;
+            font-weight: bold;
+            min-width: 250px;
+            max-width: 400px;
+            opacity: 0;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--success-green);
+        }
+
+        .toast.error {
+            background: var(--danger-red);
+        }
+
+        .toast.warning {
+            background: var(--warning-orange);
+        }
+
+        /* Pedido não encontrado */
+        .pedido-erro {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            grid-column: 1 / -1;
+        }
+
+        .pedido-erro .icone {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .pedido-erro h3 {
+            color: var(--rich-black);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pedido-erro p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
+
+            .resumo-pedido {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .progress-steps {
+                padding: 0 1rem;
+            }
+
+            .step-label {
+                font-size: 0.8rem;
+            }
+
+            .acoes-pagamento {
+                flex-direction: column;
+            }
+
+            .btn {
+                flex: none;
+            }
+
+            .progress-steps::before,
+            .progress-steps::after {
+                display: none;
+            }
+
+            .step {
+                transform: none !important;
+            }
+        }
+    </style>
+
+    <!-- Mercado Pago SDK -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="lending_page.html" class="logo">Samarone Móveis</a>
+            <div class="nav-actions">
+                <a href="formulario_cliente.html" class="btn-voltar">Voltar aos Dados</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Progress Steps -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="step completed">
+                <span>1</span>
+                <div class="step-label">Carrinho</div>
+            </div>
+            <div class="step completed">
+                <span>2</span>
+                <div class="step-label">Dados do Cliente</div>
+            </div>
+            <div class="step active">
+                <span>3</span>
+                <div class="step-label">Pagamento</div>
+            </div>
+            <div class="step">
+                <span>4</span>
+                <div class="step-label">Confirmação</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Resumo do Pedido -->
+        <div class="resumo-pedido">
+            <div class="resumo-header">
+                <h3 class="resumo-title">Resumo do Pedido</h3>
+                <div class="pedido-numero" id="pedidoNumero">Pedido #---</div>
+            </div>
+
+            <!-- Dados do Cliente -->
+            <div class="dados-cliente" id="dadosCliente">
+                <h4>Dados do Cliente</h4>
+                <div class="cliente-info" id="clienteInfo">
+                    <!-- Dados preenchidos dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Itens do Pedido -->
+            <div class="itens-pedido" id="itensPedido">
+                <!-- Itens preenchidos dinamicamente -->
+            </div>
+
+            <!-- Resumo Financeiro -->
+            <div class="resumo-financeiro">
+                <div class="resumo-linha">
+                    <span class="resumo-label">Subtotal:</span>
+                    <span class="resumo-valor" id="subtotal">R$ 0,00</span>
+                </div>
+                <div class="resumo-linha">
+                    <span class="resumo-label">Taxa de Entrega:</span>
+                    <span class="resumo-valor" id="taxaEntrega">Grátis</span>
+                </div>
+                <div class="resumo-linha">
+                    <span class="resumo-label">Total:</span>
+                    <span class="resumo-valor total-final" id="total">R$ 0,00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área de Pagamento -->
+        <div class="pagamento-container">
+            <div class="pagamento-header">
+                <h2 class="pagamento-title">Finalizar Pagamento</h2>
+                <p class="pagamento-subtitle">Escolha a forma de pagamento</p>
+            </div>
+
+            <!-- Métodos de Pagamento -->
+            <div class="metodos-pagamento">
+                <div class="metodo-item" data-metodo="mercadopago" onclick="selecionarMetodo('mercadopago')">
+                    <div class="metodo-icon">💳</div>
+                    <div class="metodo-info">
+                        <div class="metodo-nome">Mercado Pago</div>
+                        <div class="metodo-desc">Cartão, PIX, Boleto (via Mercado Pago)</div>
+                    </div>
+                    <div class="metodo-radio"></div>
+                </div>
+
+                <div class="metodo-item" data-metodo="pix" onclick="selecionarMetodo('pix')">
+                    <div class="metodo-icon">📱</div>
+                    <div class="metodo-info">
+                        <div class="metodo-nome">PIX Direto</div>
+                        <div class="metodo-desc">Transferência instantânea (sem taxas)</div>
+                    </div>
+                    <div class="metodo-radio"></div>
+                </div>
+            </div>
+
+            <!-- Container do Mercado Pago -->
+            <div class="mercadopago-container" id="mercadopagoContainer">
+                <h4 class="mp-title">Mercado Pago</h4>
+                <p class="mp-info">Você será redirecionado para o Mercado Pago para finalizar o pagamento de forma segura.</p>
+                <div id="mercadopago-button"></div>
+            </div>
+
+            <!-- Container PIX Direto -->
+            <div class="mercadopago-container" id="pixContainer">
+                <h4 class="mp-title">PIX - Transferência Direta</h4>
+                <p class="mp-info">Dados para transferência PIX:</p>
+                <div style="text-align: center; background: white; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Chave PIX (CPF):</strong><br>
+                        <span style="font-size: 1.2rem; color: var(--rich-black); font-weight: bold;">123.456.789-00</span>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Favorecido:</strong><br>
+                        <span>Samarone Móveis</span>
+                    </div>
+                    <div>
+                        <strong>Valor:</strong><br>
+                        <span style="font-size: 1.3rem; color: var(--vivid-yellow); font-weight: bold;" id="valorPix">R$ 0,00</span>
+                    </div>
+                </div>
+                <p style="text-align: center; font-size: 0.9rem; color: #666;">
+                    Após a transferência, envie o comprovante via WhatsApp:
+                    <a href="#" id="whatsappLink" target="_blank" style="color: var(--success-green);">(22) 99738-0687</a>
+                </p>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="acoes-pagamento">
+                <a href="formulario_cliente.html" class="btn btn-secondary">Voltar aos Dados</a>
+                <button class="btn btn-primary" id="btnFinalizar" onclick="processarPagamento()" disabled>
+                    Finalizar Pagamento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Erro: Pedido não encontrado -->
+    <div id="pedidoErro" class="pedido-erro" style="display: none;">
+        <div class="icone">⚠️</div>
+        <h3>Pedido não encontrado</h3>
+        <p>Não foi possível carregar os dados do pedido. Verifique o link ou tente novamente.</p>
+        <a href="lending_page.html" class="btn btn-primary">Voltar ao Início</a>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Processando pagamento...</h3>
+            <p>Aguarde, estamos finalizando seu pedido</p>
+        </div>
+    </div>
+
+    <!-- Toast para notificações -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Configuração da API
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8000'
+            : window.location.origin;
+
+        // Variáveis globais
+        let pedidoAtual = null;
+        let metodoSelecionado = null;
+        let mp = null; // Instância do Mercado Pago
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Inicializando página de pagamento...');
+
+            // Obter ID do pedido da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const pedidoId = urlParams.get('pedido');
+
+            if (!pedidoId) {
+                console.error('ID do pedido não encontrado na URL');
+                mostrarErro();
+                return;
+            }
+
+            console.log(`Carregando pedido ID: ${pedidoId}`);
+            carregarPedido(pedidoId);
+        });
+
+        // Carregar dados do pedido
+        async function carregarPedido(pedidoId) {
+            try {
+                mostrarLoading(true);
+
+                const response = await fetch(`${API_BASE}/api/pedidos/${pedidoId}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success && data.pedido) {
+                    pedidoAtual = data.pedido;
+                    console.log('Pedido carregado:', pedidoAtual);
+                    renderizarPedido();
+                    inicializarMercadoPago();
+                } else {
+                    throw new Error(data.message || 'Pedido não encontrado');
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar pedido:', error);
+                mostrarToast('Erro ao carregar pedido: ' + error.message, 'error');
+                mostrarErro();
+            } finally {
+                mostrarLoading(false);
+            }
+        }
+
+        // Renderizar dados do pedido
+        function renderizarPedido() {
+            if (!pedidoAtual) return;
+
+            // Número do pedido
+            document.getElementById('pedidoNumero').textContent = `Pedido #${pedidoAtual.id}`;
+
+            // Dados do cliente
+            const clienteInfo = document.getElementById('clienteInfo');
+            clienteInfo.innerHTML = `
+                <div><strong>${pedidoAtual.cliente.nome_completo}</strong></div>
+                <div><span>Email:</span> ${pedidoAtual.cliente.email}</div>
+                <div><span>Telefone:</span> ${pedidoAtual.cliente.telefone}</div>
+                <div><span>CPF:</span> ${pedidoAtual.cliente.cpf}</div>
+                <div><span>Endereço:</span> ${pedidoAtual.cliente.localizacao_exata}</div>
+            `;
+
+            // Itens do pedido
+            const itensPedido = document.getElementById('itensPedido');
+            itensPedido.innerHTML = '';
+
+            if (pedidoAtual.itens && pedidoAtual.itens.length > 0) {
+                pedidoAtual.itens.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'item-pedido';
+
+                    const subtotalItem = parseFloat(item.preco_unitario) * parseInt(item.quantidade);
+
+                    itemDiv.innerHTML = `
+                        <div class="item-info">
+                            <div class="item-nome">${item.movel_nome}</div>
+                            <div class="item-detalhes">${item.quantidade}x - R$ ${parseFloat(item.preco_unitario).toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <div class="item-preco">R$ ${subtotalItem.toFixed(2).replace('.', ',')}</div>
+                    `;
+
+                    itensPedido.appendChild(itemDiv);
+                });
+            }
+
+            // Resumo financeiro
+            const valorTotal = parseFloat(pedidoAtual.valor_total || 0);
+            document.getElementById('subtotal').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('total').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('valorPix').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+
+            // Link do WhatsApp com pedido
+            const whatsappLink = document.getElementById('whatsappLink');
+            const mensagem = `Olá! Acabei de fazer uma transferência PIX para o pedido #${pedidoAtual.id} no valor de R$ ${valorTotal.toFixed(2).replace('.', ',')}. Segue o comprovante em anexo.`;
+            whatsappLink.href = `https://wa.me/5522997380687?text=${encodeURIComponent(mensagem)}`;
+        }
+
+        // Inicializar SDK do Mercado Pago
+        function inicializarMercadoPago() {
+            try {
+                // Inicializar MP com chave pública (substitua pela sua chave real)
+                mp = new MercadoPago('TEST-your-public-key-here', {
+                    locale: 'pt-BR'
+                });
+                console.log('Mercado Pago SDK inicializado');
+            } catch (error) {
+                console.error('Erro ao inicializar Mercado Pago:', error);
+                mostrarToast('Erro ao carregar sistema de pagamento', 'error');
+            }
+        }
+
+        // Selecionar método de pagamento
+        function selecionarMetodo(metodo) {
+            // Remover seleção anterior
+            document.querySelectorAll('.metodo-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Esconder containers
+            document.querySelectorAll('.mercadopago-container').forEach(container => {
+                container.classList.remove('active');
+            });
+
+            // Selecionar novo método
+            const itemSelecionado = document.querySelector(`[data-metodo="${metodo}"]`);
+            if (itemSelecionado) {
+                itemSelecionado.classList.add('selected');
+                metodoSelecionado = metodo;
+
+                // Mostrar container correspondente
+                const container = document.getElementById(metodo === 'mercadopago' ? 'mercadopagoContainer' : 'pixContainer');
+                if (container) {
+                    container.classList.add('active');
+                }
+
+                // Habilitar botão
+                document.getElementById('btnFinalizar').disabled = false;
+
+                console.log(`Método selecionado: ${metodo}`);
+            }
+        }
+
+        // Processar pagamento
+        async function processarPagamento() {
+            if (!metodoSelecionado) {
+                mostrarToast('Selecione um método de pagamento', 'warning');
+                return;
+            }
+
+            if (!pedidoAtual) {
+                mostrarToast('Dados do pedido não encontrados', 'error');
+                return;
+            }
+
+            try {
+                mostrarLoading(true);
+
+                if (metodoSelecionado === 'mercadopago') {
+                    await processarPagamentoMercadoPago();
+                } else if (metodoSelecionado === 'pix') {
+                    await processarPagamentoPix();
+                }
+
+            } catch (error) {
+                console.error('Erro ao processar pagamento:', error);
+                mostrarToast('Erro ao processar pagamento: ' + error.message, 'error');
+            } finally {
+                mostrarLoading(false);
+            }
+        }
+
+        // Processar pagamento via Mercado Pago
+        async function processarPagamentoMercadoPago() {
+            try {
+                console.log('Criando preferência de pagamento...');
+
+                // Chamar API para criar preferência de pagamento
+                const response = await fetch(`${API_BASE}/api/pagamentos/criar-preferencia`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pedido_id: pedidoAtual.id,
+                        metodo: 'mercadopago'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success && data.preferencia_id) {
+                    console.log('Preferência criada:', data.preferencia_id);
+
+                    // Redirecionar para checkout do Mercado Pago
+                    if (data.checkout_url) {
+                        console.log('Redirecionando para Mercado Pago...');
+                        window.location.href = data.checkout_url;
+                    } else {
+                        throw new Error('URL de checkout não recebida');
+                    }
+                } else {
+                    throw new Error(data.message || 'Erro ao criar pagamento');
+                }
+
+            } catch (error) {
+                console.error('Erro no pagamento MP:', error);
+                throw error;
+            }
+        }
+
+        // Processar pagamento PIX direto
+        async function processarPagamentoPix() {
+            try {
+                console.log('Processando pagamento PIX...');
+
+                // Atualizar status do pedido para "aguardando_confirmacao_pix"
+                const response = await fetch(`${API_BASE}/api/pedidos/${pedidoAtual.id}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: 'aguardando_confirmacao_pix',
+                        metodo_pagamento: 'pix_direto'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarToast('Dados PIX exibidos! Aguardando transferência.', 'success');
+
+                    // Salvar dados para página de confirmação
+                    sessionStorage.setItem('pedido_pix', JSON.stringify({
+                        pedido_id: pedidoAtual.id,
+                        valor: pedidoAtual.valor_total,
+                        status: 'aguardando_confirmacao_pix',
+                        metodo: 'pix_direto'
+                    }));
+
+                    // Aguardar um pouco e redirecionar
+                    setTimeout(() => {
+                        window.location.href = `confirmacao.html?pedido=${pedidoAtual.id}&metodo=pix`;
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Erro ao processar PIX');
+                }
+
+            } catch (error) {
+                console.error('Erro no PIX:', error);
+                throw error;
+            }
+        }
+
+        // Mostrar erro de pedido não encontrado
+        function mostrarErro() {
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('pedidoErro').style.display = 'block';
+        }
+
+        // Mostrar/esconder loading
+        function mostrarLoading(mostrar) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = mostrar ? 'flex' : 'none';
+        }
+
+        // Mostrar toast de notificação
+        function mostrarToast(mensagem, tipo = 'success') {
+            const toastExistente = document.getElementById('toast');
+            toastExistente.classList.remove('show');
+
+            setTimeout(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = mensagem;
+                toast.className = `toast ${tipo}`;
+                toast.offsetHeight;
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+            }, 100);
+        }
+
+        // Funções auxiliares para desenvolvimento/teste
+        function simularPedido() {
+            pedidoAtual = {
+                id: 123,
+                valor_total: 450.00,
+                status: 'pendente_pagamento',
+                cliente: {
+                    nome_completo: 'João Silva Santos',
+                    email: 'joao@email.com',
+                    telefone: '(22) 99738-0687',
+                    cpf: '123.456.789-09',
+                    localizacao_exata: 'Rua das Flores, 123, Centro, Búzios - RJ'
+                },
+                itens: [
+                    {
+                        movel_nome: 'Mesa de Centro Industrial',
+                        quantidade: 1,
+                        preco_unitario: '450.00'
+                    }
+                ]
+            };
+            renderizarPedido();
+            console.log('Pedido simulado carregado para teste');
+        }
+
+        // Expor função de teste
+        window.simularPedido = simularPedido;
+
+        console.log('Página de pagamento carregada. Use simularPedido() para testar sem API.');
+    </script>
+</body>
+</html>
