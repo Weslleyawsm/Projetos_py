@@ -38,7 +38,7 @@ class APIRouter(BaseHTTPRequestHandler):
         url_parsed_path = urllib.parse.urlparse(self.path)
         path = url_parsed_path.path
         query_params = urllib.parse.parse_qs(url_parsed_path.query)
-
+        print(f"DEBUG - Path recebido: {self.path}")
         try:
             if path == '/' or path == '/index.html':
                 self._serve_static_file('static/lending_page.html')
@@ -49,15 +49,19 @@ class APIRouter(BaseHTTPRequestHandler):
             elif path == '/formulario_cliente.html':
                 self._serve_static_file('static/formulario_cliente.html')
 
-            elif path.startswith('/static/images'):
-                relative_path = path[1:]
-                file_path = os.path.join(self.project_root, relative_path)
+            elif path == '/formulario_pagamento.html':
+                self._serve_static_file('static/formulario_pagamento.html')
 
-                if os.path.exists(file_path):
+            elif path.startswith('/static/images'):
+                relative_path = path[1:] #nesse caso, irá remover o "/" de "/static/images". irá ficar assim "static/images"
+                file_path = os.path.join(self.project_root, relative_path) #vai juntar o caminho de "self.project_root" com "relative_path". isso deve acontecer pra conseguirmos o caminho completo da imagem selecionada
+
+                if os.path.exists(file_path): #os.path.exists() -> se esse caminho existe (no caso o parametro passado é file_path)...
                     if os.path.isfile(file_path):
-                        self._serve_image_file(file_path)
+                        self._serve_image_file(file_path) #se o arquivo for um caminho da imagem selecionada, então chame a função _serve_image_file para servir a imagem
                     else:
-                        self._serve_default_image_from_folder(file_path)
+                        self._serve_default_image_from_folder(file_path) #se não for o caminho exato de um arquivo de imagem, mas um pasta de imagens,
+                        #chame a função self._serve_default_image_from_folder() que serve a imagem padrão da pasta
                 else:
                     print(f"⚠️ Caminho não existe: {file_path}")
                     self._serve_placeholder_image()
@@ -115,11 +119,10 @@ class APIRouter(BaseHTTPRequestHandler):
 
             with open(file_path, 'rb') as image_file:
                 image_data = image_file.read()
-
             self.send_response(200)
-            self.send_header('Content-type', mime_type)
-            self.send_header('Content-length', str(len(image_data)))
-            self.send_header('Cache-Control', 'public, max-age=86400')
+            self.send_header('Content_Type', mime_type)
+            self.send_header('Content_Lenght', str(len(image_data)))
+            self.send_header('Cache_Control', 'max-age=86400')
             self._set_cors_headers()
             self.end_headers()
             self.wfile.write(image_data)
@@ -222,7 +225,6 @@ class APIRouter(BaseHTTPRequestHandler):
     # 📦 HANDLERS DOS MÓVEIS
     def handle_moveis_destaque(self, query_params):
         try:
-            print("==MOSTRANDO MÓVEIS EM DESTAQUE==")
             moveis_destaque = MoveisController.listar_destaques()
 
             if moveis_destaque and moveis_destaque.get('sucesso'):
@@ -237,7 +239,7 @@ class APIRouter(BaseHTTPRequestHandler):
                 }
                 self.send_json_response(resposta)
             else:
-                print("==NENHUM MÓVEL ENCONTRADO==")
+
                 resposta = {
                     'success': False,
                     'mensagem': 'Nenhum móvel encontrado',
@@ -555,30 +557,3 @@ class APIRouter(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
 
 
-class MoveisServer:
-    def __init__(self, host='0.0.0.0', port=None):
-        self.host = host
-        # ✅ RENDER: Usar porta dinâmica ou 8000 como fallback
-        self.port = port or int(os.environ.get('PORT', 8000))
-        self.server = None
-
-    def start(self):
-        try:
-            self.server = HTTPServer((self.host, self.port), APIRouter)
-            print(f"🚀 Servidor rodando em http://{self.host}:{self.port}")
-            print(f"📦 Móveis em destaque: http://{self.host}:{self.port}/api/moveis/destaques")
-            print(f"🏢 Informações da empresa: http://{self.host}:{self.port}/api/info/empresa")
-            print(f"🖼️ Imagens: http://{self.host}:{self.port}/static/images")
-            self.server.serve_forever()
-
-        except KeyboardInterrupt:
-            print("\n⚠️ Servidor Interrompido")
-        except Exception as e:
-            print(f"❌ Erro ao iniciar servidor: {e}")
-
-def create_server(host='0.0.0.0', port=None):
-    return MoveisServer(host, port)
-
-def main():
-    servidor = create_server()
-    return servidor.start()
