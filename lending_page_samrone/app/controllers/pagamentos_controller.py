@@ -10,8 +10,8 @@ import smtplib
 
 class PagamentosController:
     # ✅ CREDENCIAIS DE TESTE (suas credenciais reais)
-    ACCESS_TOKEN = "APP_USR-949940508489516-090116-f366f4ebcd3ccef9aff076fb5e81e264-2324168709"
-    PUBLIC_KEY = "APP_USR-12797475-dcec-414a-8b96-cfbde34cbcb8"
+    ACCESS_TOKEN = "APP_USR-949940508489516-090317-8442d32ec33a3e4cd88ab732600110a0-2324168709"
+    PUBLIC_KEY = "APP_USR-3a8e13c0-04d8-4ccc-b7c3-5848b6c88ca9"
 
     # URLs da API do Mercado Pago
     MP_API_BASE = "https://api.mercadopago.com"
@@ -469,4 +469,5 @@ def testar_integracao():
 if __name__ == "__main__":
     # Executar teste se rodar o arquivo diretamente
     testar_integracao()
+
 
