@@ -2,7 +2,7 @@ import requests
 import json
 from datetime import datetime
 
-from app.controllers.pedidos_controllers import PedidosController, buscar_itens
+from app.controllers.pedidos_controllers import PedidosController
 from app.models.pedido import Pedido
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -421,7 +421,7 @@ def testar_integracao():
     """
     print("🧪 Testando integração Mercado Pago...")
 
-    # Dados de teste
+    """"# Dados de teste
     pedido_id = 999
     dados_cliente = {
         'nome_completo': 'João Silva Teste',
@@ -463,11 +463,10 @@ def testar_integracao():
 
     #print(PagamentosController.buscar_pagamento(999))
     testar_notificação()
-    return resultado
+    return resultado"""
 
 
 if __name__ == "__main__":
     # Executar teste se rodar o arquivo diretamente
     testar_integracao()
-
 
