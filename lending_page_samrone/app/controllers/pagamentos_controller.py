@@ -58,7 +58,7 @@ class PagamentosController:
             }
 
             # 🌐 URLs DE RETORNO (ajustar para seu domínio)
-            base_url = "https://localhost:8000"  # TODO: Alterar para URL real
+            base_url = "https://projetos-py-1.onrender.com"  # TODO: Alterar para URL real
 
             # 🔧 CONFIGURAR PREFERÊNCIA
             preference_data = {
@@ -469,4 +469,5 @@ def testar_integracao():
 if __name__ == "__main__":
     # Executar teste se rodar o arquivo diretamente
     testar_integracao()
+
 
