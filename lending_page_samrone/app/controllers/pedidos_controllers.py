@@ -260,3 +260,24 @@ class PedidosController:
                 'pedido': None,
                 'message': f'Erro interno: {str(e)}'
             }
+
+pedido = PedidosController.buscar_pedido_json(56)
+#(pedido)
+itens = pedido['pedido']['itens']
+print(f"ITENS: {itens}")
+
+def buscar_itens():
+    print(f"Informações do pedido\n\n     "
+          f"Número do seu pedido:{pedido['pedido']['id']}\n     "
+          f"Local da compra: {pedido['pedido']['observacoes']}\n     "
+          f"Valor da compra: {pedido['pedido']['valor_total']}\n     "
+          f"Peças Compradas:     "
+
+          )
+    for item in itens:
+        print(f"        {item['movel_nome']} | Subtoal: {item['subtotal']}")
+
+    return None
+buscar_itens()
+
+
