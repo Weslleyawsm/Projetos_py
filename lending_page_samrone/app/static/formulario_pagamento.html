@@ -325,42 +325,33 @@
             font-size: 1rem;
         }
 
-        /* Métodos de Pagamento */
-        .metodos-pagamento {
-            margin-bottom: 2rem;
-        }
-
-        .metodo-item {
-            border: 2px solid #e0e0e0;
+        /* Método de Pagamento - Apenas Mercado Pago */
+        .metodo-pagamento {
+            border: 2px solid var(--vivid-yellow);
             border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 2rem;
+            margin-bottom: 2rem;
             display: flex;
             align-items: center;
             gap: 1rem;
-        }
-
-        .metodo-item:hover {
-            border-color: var(--vivid-yellow);
-            background: rgba(254, 231, 21, 0.05);
-        }
-
-        .metodo-item.selected {
-            border-color: var(--vivid-yellow);
             background: rgba(254, 231, 21, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .metodo-pagamento:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(254, 231, 21, 0.3);
         }
 
         .metodo-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--light-gray);
+            width: 80px;
+            height: 80px;
+            background: var(--vivid-yellow);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
             flex-shrink: 0;
         }
 
@@ -370,75 +361,31 @@
 
         .metodo-nome {
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             color: var(--rich-black);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
         }
 
         .metodo-desc {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            line-height: 1.4;
         }
 
-        .metodo-radio {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 50%;
+        .metodo-features {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
         }
 
-        .metodo-item.selected .metodo-radio {
-            border-color: var(--vivid-yellow);
-            background: var(--vivid-yellow);
-        }
-
-        .metodo-item.selected .metodo-radio::after {
-            content: '✓';
-            color: var(--rich-black);
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        /* Área do Mercado Pago */
-        .mercadopago-container {
-            background: var(--light-gray);
+        .feature-badge {
+            background: var(--rich-black);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
             border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            display: none;
-        }
-
-        .mercadopago-container.active {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .mp-title {
-            color: var(--rich-black);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-
-        .mp-info {
-            text-align: center;
-            color: #666;
-            margin-bottom: 1.5rem;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
 
         /* Botões de Ação */
@@ -605,6 +552,15 @@
             .resumo-pedido {
                 order: -1;
             }
+
+            .metodo-pagamento {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .metodo-features {
+                justify-content: center;
+            }
         }
 
         @media (max-width: 768px) {
@@ -718,66 +674,36 @@
         <div class="pagamento-container">
             <div class="pagamento-header">
                 <h2 class="pagamento-title">Finalizar Pagamento</h2>
-                <p class="pagamento-subtitle">Escolha a forma de pagamento</p>
+                <p class="pagamento-subtitle">Pague com segurança via Mercado Pago</p>
             </div>
 
-            <!-- Métodos de Pagamento -->
-            <div class="metodos-pagamento">
-                <div class="metodo-item" data-metodo="mercadopago" onclick="selecionarMetodo('mercadopago')">
-                    <div class="metodo-icon">💳</div>
-                    <div class="metodo-info">
-                        <div class="metodo-nome">Mercado Pago</div>
-                        <div class="metodo-desc">Cartão, PIX, Boleto (via Mercado Pago)</div>
+            <!-- Método de Pagamento - Apenas Mercado Pago -->
+            <div class="metodo-pagamento">
+                <div class="metodo-icon">💳</div>
+                <div class="metodo-info">
+                    <div class="metodo-nome">Mercado Pago</div>
+                    <div class="metodo-desc">
+                        Todas as formas de pagamento em uma só plataforma segura e confiável
                     </div>
-                    <div class="metodo-radio"></div>
-                </div>
-
-                <div class="metodo-item" data-metodo="pix" onclick="selecionarMetodo('pix')">
-                    <div class="metodo-icon">📱</div>
-                    <div class="metodo-info">
-                        <div class="metodo-nome">PIX Direto</div>
-                        <div class="metodo-desc">Transferência instantânea (sem taxas)</div>
-                    </div>
-                    <div class="metodo-radio"></div>
-                </div>
-            </div>
-
-            <!-- Container do Mercado Pago -->
-            <div class="mercadopago-container" id="mercadopagoContainer">
-                <h4 class="mp-title">Mercado Pago</h4>
-                <p class="mp-info">Você será redirecionado para o Mercado Pago para finalizar o pagamento de forma segura.</p>
-                <div id="mercadopago-button"></div>
-            </div>
-
-            <!-- Container PIX Direto -->
-            <div class="mercadopago-container" id="pixContainer">
-                <h4 class="mp-title">PIX - Transferência Direta</h4>
-                <p class="mp-info">Dados para transferência PIX:</p>
-                <div style="text-align: center; background: white; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
-                    <div style="margin-bottom: 1rem;">
-                        <strong>Chave PIX (CPF):</strong><br>
-                        <span style="font-size: 1.2rem; color: var(--rich-black); font-weight: bold;">123.456.789-00</span>
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <strong>Favorecido:</strong><br>
-                        <span>Samarone Móveis</span>
-                    </div>
-                    <div>
-                        <strong>Valor:</strong><br>
-                        <span style="font-size: 1.3rem; color: var(--vivid-yellow); font-weight: bold;" id="valorPix">R$ 0,00</span>
+                    <div class="metodo-features">
+                        <span class="feature-badge">PIX</span>
+                        <span class="feature-badge">Cartão até 12x</span>
+                        <span class="feature-badge">Boleto</span>
+                        <span class="feature-badge">Débito</span>
                     </div>
                 </div>
-                <p style="text-align: center; font-size: 0.9rem; color: #666;">
-                    Após a transferência, envie o comprovante via WhatsApp:
-                    <a href="#" id="whatsappLink" target="_blank" style="color: var(--success-green);">(22) 99738-0687</a>
-                </p>
             </div>
 
             <!-- Botões de Ação -->
             <div class="acoes-pagamento">
                 <a href="formulario_cliente.html" class="btn btn-secondary">Voltar aos Dados</a>
-                <button class="btn btn-primary" id="btnFinalizar" onclick="processarPagamento()" disabled>
-                    Finalizar Pagamento
+                <button class="btn btn-primary" id="btnFinalizar" onclick="processarPagamento(false)">
+                    <span id="btnTexto">Ir para Mercado Pago</span>
+                    <span id="btnLoading" style="display: none;">⏳ Processando...</span>
+                </button>
+                <!-- BOTÃO DE TESTE -->
+                <button class="btn btn-secondary" onclick="processarPagamento(true)" style="background: orange; color: white;">
+                    🧪 SIMULAR APROVADO (TESTE)
                 </button>
             </div>
         </div>
@@ -796,7 +722,7 @@
         <div class="loading-content">
             <div class="loading-spinner"></div>
             <h3>Processando pagamento...</h3>
-            <p>Aguarde, estamos finalizando seu pedido</p>
+            <p>Redirecionando para o Mercado Pago...</p>
         </div>
     </div>
 
@@ -811,26 +737,40 @@
 
         // Variáveis globais
         let pedidoAtual = null;
-        let metodoSelecionado = null;
         let mp = null; // Instância do Mercado Pago
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Inicializando página de pagamento...');
+            console.log('🔄 Inicializando página de pagamento...');
 
             // Obter ID do pedido da URL
             const urlParams = new URLSearchParams(window.location.search);
             const pedidoId = urlParams.get('pedido');
 
             if (!pedidoId) {
-                console.error('ID do pedido não encontrado na URL');
+                console.error('❌ ID do pedido não encontrado na URL');
                 mostrarErro();
                 return;
             }
 
-            console.log(`Carregando pedido ID: ${pedidoId}`);
+            console.log(`📦 Carregando pedido ID: ${pedidoId}`);
             carregarPedido(pedidoId);
+            inicializarMercadoPago();
         });
+
+        // Inicializar SDK do Mercado Pago
+        function inicializarMercadoPago() {
+            try {
+                // ✅ USAR SUA PUBLIC KEY REAL
+                mp = new MercadoPago('TEST-402377a6-ea5c-4024-a58d-c79448be9738', {
+                    locale: 'pt-BR'
+                });
+                console.log('✅ Mercado Pago SDK inicializado');
+            } catch (error) {
+                console.error('❌ Erro ao inicializar Mercado Pago:', error);
+                mostrarToast('Erro ao carregar sistema de pagamento', 'error');
+            }
+        }
 
         // Carregar dados do pedido
         async function carregarPedido(pedidoId) {
@@ -847,15 +787,14 @@
 
                 if (data.success && data.pedido) {
                     pedidoAtual = data.pedido;
-                    console.log('Pedido carregado:', pedidoAtual);
+                    console.log('✅ Pedido carregado:', pedidoAtual);
                     renderizarPedido();
-                    inicializarMercadoPago();
                 } else {
                     throw new Error(data.message || 'Pedido não encontrado');
                 }
 
             } catch (error) {
-                console.error('Erro ao carregar pedido:', error);
+                console.error('❌ Erro ao carregar pedido:', error);
                 mostrarToast('Erro ao carregar pedido: ' + error.message, 'error');
                 mostrarErro();
             } finally {
@@ -893,7 +832,7 @@
 
                     itemDiv.innerHTML = `
                         <div class="item-info">
-                            <div class="item-nome">${item.movel_nome}</div>
+                            <div class="item-nome">${item.movel_nome || 'Móvel'}</div>
                             <div class="item-detalhes">${item.quantidade}x - R$ ${parseFloat(item.preco_unitario).toFixed(2).replace('.', ',')}</div>
                         </div>
                         <div class="item-preco">R$ ${subtotalItem.toFixed(2).replace('.', ',')}</div>
@@ -907,66 +846,13 @@
             const valorTotal = parseFloat(pedidoAtual.valor_total || 0);
             document.getElementById('subtotal').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
             document.getElementById('total').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
-            document.getElementById('valorPix').textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
 
-            // Link do WhatsApp com pedido
-            const whatsappLink = document.getElementById('whatsappLink');
-            const mensagem = `Olá! Acabei de fazer uma transferência PIX para o pedido #${pedidoAtual.id} no valor de R$ ${valorTotal.toFixed(2).replace('.', ',')}. Segue o comprovante em anexo.`;
-            whatsappLink.href = `https://wa.me/5522997380687?text=${encodeURIComponent(mensagem)}`;
+            // Habilitar botão de pagamento
+            document.getElementById('btnFinalizar').disabled = false;
         }
 
-        // Inicializar SDK do Mercado Pago
-        function inicializarMercadoPago() {
-            try {
-                // Inicializar MP com chave pública (substitua pela sua chave real)
-                mp = new MercadoPago('TEST-your-public-key-here', {
-                    locale: 'pt-BR'
-                });
-                console.log('Mercado Pago SDK inicializado');
-            } catch (error) {
-                console.error('Erro ao inicializar Mercado Pago:', error);
-                mostrarToast('Erro ao carregar sistema de pagamento', 'error');
-            }
-        }
-
-        // Selecionar método de pagamento
-        function selecionarMetodo(metodo) {
-            // Remover seleção anterior
-            document.querySelectorAll('.metodo-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-
-            // Esconder containers
-            document.querySelectorAll('.mercadopago-container').forEach(container => {
-                container.classList.remove('active');
-            });
-
-            // Selecionar novo método
-            const itemSelecionado = document.querySelector(`[data-metodo="${metodo}"]`);
-            if (itemSelecionado) {
-                itemSelecionado.classList.add('selected');
-                metodoSelecionado = metodo;
-
-                // Mostrar container correspondente
-                const container = document.getElementById(metodo === 'mercadopago' ? 'mercadopagoContainer' : 'pixContainer');
-                if (container) {
-                    container.classList.add('active');
-                }
-
-                // Habilitar botão
-                document.getElementById('btnFinalizar').disabled = false;
-
-                console.log(`Método selecionado: ${metodo}`);
-            }
-        }
-
-        // Processar pagamento
-        async function processarPagamento() {
-            if (!metodoSelecionado) {
-                mostrarToast('Selecione um método de pagamento', 'warning');
-                return;
-            }
-
+        // Processar pagamento via Mercado Pago
+        async function processarPagamento(simular = false) {
             if (!pedidoAtual) {
                 mostrarToast('Dados do pedido não encontrados', 'error');
                 return;
@@ -975,50 +861,57 @@
             try {
                 mostrarLoading(true);
 
-                if (metodoSelecionado === 'mercadopago') {
-                    await processarPagamentoMercadoPago();
-                } else if (metodoSelecionado === 'pix') {
-                    await processarPagamentoPix();
+                let url, dados;
+
+                if (simular) {
+                    // SIMULAÇÃO PARA TESTE
+                    console.log('🧪 Simulando pagamento aprovado...');
+                    url = `${API_BASE}/api/pagamentos/simular-aprovado`;
+                    dados = {
+                        pedido_id: pedidoAtual.id
+                    };
+                } else {
+                    // MERCADO PAGO REAL
+                    console.log('💳 Criando preferência de pagamento...');
+                    url = `${API_BASE}/api/pagamentos/criar-preferencia`;
+                    dados = {
+                        pedido_id: pedidoAtual.id,
+                        metodo: 'mercadopago'
+                    };
                 }
 
-            } catch (error) {
-                console.error('Erro ao processar pagamento:', error);
-                mostrarToast('Erro ao processar pagamento: ' + error.message, 'error');
-            } finally {
-                mostrarLoading(false);
-            }
-        }
-
-        // Processar pagamento via Mercado Pago
-        async function processarPagamentoMercadoPago() {
-            try {
-                console.log('Criando preferência de pagamento...');
-
-                // Chamar API para criar preferência de pagamento
-                const response = await fetch(`${API_BASE}/api/pagamentos/criar-preferencia`, {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        pedido_id: pedidoAtual.id,
-                        metodo: 'mercadopago'
-                    })
+                    body: JSON.stringify(dados)
                 });
 
+                console.log(`📨 Status da resposta: ${response.status}`);
+
                 if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('❌ Erro HTTP:', response.status, errorText);
+                    throw new Error(`Erro do servidor: ${response.status}`);
                 }
 
                 const data = await response.json();
+                console.log('📊 Resposta da API:', data);
 
-                if (data.success && data.preferencia_id) {
-                    console.log('Preferência criada:', data.preferencia_id);
+                if (data.success) {
+                    if (simular) {
+                        mostrarToast('Pagamento simulado como APROVADO!', 'success');
 
-                    // Redirecionar para checkout do Mercado Pago
-                    if (data.checkout_url) {
-                        console.log('Redirecionando para Mercado Pago...');
-                        window.location.href = data.checkout_url;
+                        setTimeout(() => {
+                            window.location.href = `confirmacao.html?status=success&pedido=${pedidoAtual.id}`;
+                        }, 2000);
+                    } else if (data.checkout_url) {
+                        mostrarToast('Redirecionando para o Mercado Pago...', 'success');
+
+                        setTimeout(() => {
+                            window.location.href = data.checkout_url;
+                        }, 1500);
                     } else {
                         throw new Error('URL de checkout não recebida');
                     }
@@ -1027,56 +920,10 @@
                 }
 
             } catch (error) {
-                console.error('Erro no pagamento MP:', error);
-                throw error;
-            }
-        }
-
-        // Processar pagamento PIX direto
-        async function processarPagamentoPix() {
-            try {
-                console.log('Processando pagamento PIX...');
-
-                // Atualizar status do pedido para "aguardando_confirmacao_pix"
-                const response = await fetch(`${API_BASE}/api/pedidos/${pedidoAtual.id}/status`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        status: 'aguardando_confirmacao_pix',
-                        metodo_pagamento: 'pix_direto'
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.success) {
-                    mostrarToast('Dados PIX exibidos! Aguardando transferência.', 'success');
-
-                    // Salvar dados para página de confirmação
-                    sessionStorage.setItem('pedido_pix', JSON.stringify({
-                        pedido_id: pedidoAtual.id,
-                        valor: pedidoAtual.valor_total,
-                        status: 'aguardando_confirmacao_pix',
-                        metodo: 'pix_direto'
-                    }));
-
-                    // Aguardar um pouco e redirecionar
-                    setTimeout(() => {
-                        window.location.href = `confirmacao.html?pedido=${pedidoAtual.id}&metodo=pix`;
-                    }, 2000);
-                } else {
-                    throw new Error(data.message || 'Erro ao processar PIX');
-                }
-
-            } catch (error) {
-                console.error('Erro no PIX:', error);
-                throw error;
+                console.error('❌ Erro no pagamento:', error);
+                mostrarToast('Erro ao processar pagamento: ' + error.message, 'error');
+            } finally {
+                mostrarLoading(false);
             }
         }
 
@@ -1089,7 +936,20 @@
         // Mostrar/esconder loading
         function mostrarLoading(mostrar) {
             const overlay = document.getElementById('loadingOverlay');
+            const btnTexto = document.getElementById('btnTexto');
+            const btnLoading = document.getElementById('btnLoading');
+
             overlay.style.display = mostrar ? 'flex' : 'none';
+
+            if (btnTexto && btnLoading) {
+                btnTexto.style.display = mostrar ? 'none' : 'inline';
+                btnLoading.style.display = mostrar ? 'inline' : 'none';
+            }
+
+            const btnFinalizar = document.getElementById('btnFinalizar');
+            if (btnFinalizar) {
+                btnFinalizar.disabled = mostrar;
+            }
         }
 
         // Mostrar toast de notificação
@@ -1110,7 +970,7 @@
             }, 100);
         }
 
-        // Funções auxiliares para desenvolvimento/teste
+        // Função auxiliar para desenvolvimento/teste
         function simularPedido() {
             pedidoAtual = {
                 id: 123,
@@ -1132,13 +992,13 @@
                 ]
             };
             renderizarPedido();
-            console.log('Pedido simulado carregado para teste');
+            console.log('✅ Pedido simulado carregado para teste');
         }
 
         // Expor função de teste
         window.simularPedido = simularPedido;
 
-        console.log('Página de pagamento carregada. Use simularPedido() para testar sem API.');
+        console.log('✅ Página de pagamento carregada. Use simularPedido() para testar.');
     </script>
 </body>
 </html>
