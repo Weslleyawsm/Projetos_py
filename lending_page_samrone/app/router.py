@@ -6,6 +6,8 @@ import mimetypes
 from app.models.formualario_cliente import FormularioCliente
 from app.controllers.moveis_controllers import MoveisController
 from app.controllers.pedidos_controllers import PedidosController
+from app.controllers.pagamentos_controller import PagamentosController
+from app.models.pedido import Pedido
 import os
 import sys
 import json
@@ -52,6 +54,10 @@ class APIRouter(BaseHTTPRequestHandler):
             elif path == '/formulario_pagamento.html':
                 self._serve_static_file('static/formulario_pagamento.html')
 
+            elif path.startswith('/api/pagamentos/status/'):
+                pagamento_id = path.split('/')[-1]
+                self.handle_status_pagamento(pagamento_id)
+
             elif path.startswith('/static/images'):
                 relative_path = path[1:] #nesse caso, irá remover o "/" de "/static/images". irá ficar assim "static/images"
                 file_path = os.path.join(self.project_root, relative_path) #vai juntar o caminho de "self.project_root" com "relative_path". isso deve acontecer pra conseguirmos o caminho completo da imagem selecionada
@@ -83,6 +89,7 @@ class APIRouter(BaseHTTPRequestHandler):
                 pedido_id = path.split('/')[-1]
                 self.handle_buscar_pedido(pedido_id)
 
+
             else:
                 print(f"⚠️ Nenhuma rota encontrada para: '{path}'")
                 self._handle_404()
@@ -101,6 +108,14 @@ class APIRouter(BaseHTTPRequestHandler):
 
             elif path == '/api/pedidos/criar':
                 self.handle_criar_pedido()
+
+            elif path == '/api/pagamentos/criar-preferencia':
+                self.handle_criar_preferencia()
+
+            elif path == '/api/pagamentos/webhook':
+                self.handle_webhook_mercadopago()
+            elif path == '/api/pagamentos/simular-aprovado':
+                self.handle_simular_pagamento_aprovado()
 
             else:
                 print(f"⚠️ Rota POST não encontrada: '{path}'")
@@ -130,6 +145,28 @@ class APIRouter(BaseHTTPRequestHandler):
         except Exception as e:
             print(f"⚠️ Erro ao servir arquivo de imagem: {e}")
             self._serve_placeholder_image()
+
+    def handle_simular_pagamento_aprovado(self):
+        try:
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            dados = json.loads(post_data.decode('utf-8'))
+
+            pedido_id = dados.get('pedido_id')
+
+            # Simular pagamento aprovado
+            resultado = Pedido.atualizar_status(pedido_id, 'pago')
+
+            resposta = {
+                'success': True,
+                'message': 'Pagamento simulado como APROVADO',
+                'pedido_id': pedido_id,
+                'status': 'pago'
+            }
+            self.send_json_response(resposta)
+
+        except Exception as e:
+            self.send_json_response({'success': False, 'message': str(e)}, 500)
 
     def _serve_default_image_from_folder(self, folder_path):
         """Serve primeira imagem encontrada na pasta"""
@@ -491,6 +528,166 @@ class APIRouter(BaseHTTPRequestHandler):
             "error": error_message
         }
         self.send_json_response(response_data, 500)
+
+    def handle_criar_preferencia(self):
+        try:
+            print("💳 Criando preferência de pagamento...")
+
+            # Ler dados do POST
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            dados = json.loads(post_data.decode('utf-8'))
+
+            print(f"📊 Dados recebidos: {dados}")
+
+            # Extrair dados necessários
+            pedido_id = dados.get('pedido_id')
+            metodo = dados.get('metodo', 'mercadopago')
+
+            if not pedido_id:
+                resposta = {
+                    'success': False,
+                    'message': 'ID do pedido é obrigatório'
+                }
+                self.send_json_response(resposta, 400)
+                return
+
+            # Buscar dados do pedido no banco
+            from app.controllers.pedidos_controllers import PedidosController
+            resultado_pedido = PedidosController.buscar_pedido_json(pedido_id)
+
+            if not resultado_pedido.get('sucesso'):
+                resposta = {
+                    'success': False,
+                    'message': 'Pedido não encontrado'
+                }
+                self.send_json_response(resposta, 404)
+                return
+
+            pedido = resultado_pedido['pedido']
+            cliente = pedido.get('cliente', {})
+            itens = pedido.get('itens', [])
+
+            if not cliente or not itens:
+                resposta = {
+                    'success': False,
+                    'message': 'Dados incompletos do pedido'
+                }
+                self.send_json_response(resposta, 400)
+                return
+
+            # Criar preferência no Mercado Pago
+            resultado = PagamentosController.criar_preferencia_pagamento(
+                pedido_id, cliente, itens
+            )
+
+            if resultado.get('sucesso'):
+                resposta = {
+                    'success': True,
+                    'message': resultado.get('message'),
+                    'preferencia_id': resultado.get('preferencia_id'),
+                    'checkout_url': resultado.get('checkout_url'),
+                    'sandbox_url': resultado.get('sandbox_url'),
+                    'qr_code': resultado.get('qr_code')
+                }
+                self.send_json_response(resposta)
+            else:
+                resposta = {
+                    'success': False,
+                    'message': resultado.get('message', 'Erro ao criar preferência'),
+                    'detalhes': resultado.get('detalhes')
+                }
+                self.send_json_response(resposta, 400)
+
+        except Exception as e:
+            print(f"❌ Erro ao criar preferência: {e}")
+            resposta = {
+                'success': False,
+                'message': f'Erro interno: {str(e)}'
+            }
+            self.send_json_response(resposta, 500)
+
+    def handle_webhook_mercadopago(self):
+        try:
+            print("📨 Webhook do Mercado Pago recebido")
+
+            # Ler dados do webhook
+            content_length = int(self.headers.get('Content-Length', 0))
+
+            if content_length > 0:
+                post_data = self.rfile.read(content_length)
+                dados_webhook = json.loads(post_data.decode('utf-8'))
+            else:
+                dados_webhook = {}
+
+            print(f"📄 Dados do webhook: {dados_webhook}")
+
+            # Processar webhook
+            resultado = PagamentosController.processar_webhook(dados_webhook)
+
+            if resultado.get('sucesso'):
+                resposta = {
+                    'success': True,
+                    'message': 'Webhook processado com sucesso',
+                    'pedido_id': resultado.get('pedido_id'),
+                    'status_novo': resultado.get('status_novo')
+                }
+                # Mercado Pago espera status 200 ou 201
+                self.send_json_response(resposta, 200)
+            else:
+                resposta = {
+                    'success': False,
+                    'message': resultado.get('message', 'Erro ao processar webhook')
+                }
+                # Mesmo em erro, retornar 200 para não re-tentar o webhook
+                self.send_json_response(resposta, 200)
+
+        except Exception as e:
+            print(f"❌ Erro no webhook: {e}")
+            resposta = {
+                'success': False,
+                'message': f'Erro interno: {str(e)}'
+            }
+            # Sempre retornar 200 para webhooks
+            self.send_json_response(resposta, 200)
+
+    def handle_status_pagamento(self, pagamento_id):
+        try:
+            print(f"🔍 Consultando status do pagamento: {pagamento_id}")
+
+            resultado = PagamentosController.buscar_pagamento(pagamento_id)
+
+            if resultado.get('sucesso'):
+                pagamento = resultado['pagamento']
+                resposta = {
+                    'success': True,
+                    'pagamento': {
+                        'id': pagamento.get('id'),
+                        'status': pagamento.get('status'),
+                        'status_detail': pagamento.get('status_detail'),
+                        'payment_method_id': pagamento.get('payment_method_id'),
+                        'payment_type_id': pagamento.get('payment_type_id'),
+                        'transaction_amount': pagamento.get('transaction_amount'),
+                        'date_created': pagamento.get('date_created'),
+                        'date_approved': pagamento.get('date_approved'),
+                        'external_reference': pagamento.get('external_reference')
+                    }
+                }
+                self.send_json_response(resposta)
+            else:
+                resposta = {
+                    'success': False,
+                    'message': resultado.get('message', 'Erro ao consultar pagamento')
+                }
+                self.send_json_response(resposta, 400)
+
+        except Exception as e:
+            print(f"❌ Erro ao consultar pagamento: {e}")
+            resposta = {
+                'success': False,
+                'message': f'Erro interno: {str(e)}'
+            }
+            self.send_json_response(resposta, 500)
 
     def log_message(self, format, *args):
         print(f"🌐 {self.address_string()} - {format % args}")
