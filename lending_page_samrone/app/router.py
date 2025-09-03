@@ -1,6 +1,7 @@
 import os.path
 import urllib.parse
 import json
+import requests
 from http.server import BaseHTTPRequestHandler
 import mimetypes
 from app.models.formualario_cliente import FormularioCliente
@@ -84,6 +85,9 @@ class APIRouter(BaseHTTPRequestHandler):
             # 📦 ROTAS DOS PEDIDOS
             elif path == '/api/pedidos':
                 self.handle_listar_pedidos()
+                
+            elif path == '/api/pagamentos/verificar-conta':
+                self.handle_verificar_conta()
 
             elif path.startswith('/api/pedidos/'):
                 pedido_id = path.split('/')[-1]
@@ -226,6 +230,29 @@ class APIRouter(BaseHTTPRequestHandler):
         except Exception as e:
             print(f"⚠️ Erro no placeholder: {e}")
             self._handle_404()
+
+    def handle_verificar_conta(self):
+        try:
+            import requests
+            headers = {
+                "Authorization": f"Bearer APP_USR-1528709870295383-090318-24ebb6781c2d7834d16bd85fb44a1c67-2324168709"}
+            response = requests.get("https://api.mercadopago.com/users/me", headers=headers)
+
+            if response.status_code == 200:
+                dados = response.json()
+                resultado = {
+                    'success': True,
+                    'status': dados.get('status'),
+                    'site_status': dados.get('site_status'),
+                    'merchant_status': dados.get('merchant_status'),
+                    'user_type': dados.get('user_type')
+                }
+            else:
+                resultado = {'success': False, 'erro': response.text, 'status_code': response.status_code}
+
+            self.send_json_response(resultado)
+        except Exception as e:
+            self.send_json_response({'success': False, 'erro': str(e)}, 500)
 
     def _serve_static_file(self, filename):
         """Serve arquivos estáticos (HTML, CSS, JS)"""
@@ -752,6 +779,5 @@ class APIRouter(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
-
 
 
