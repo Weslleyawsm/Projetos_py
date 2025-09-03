@@ -1,7 +1,6 @@
 import os.path
 import urllib.parse
 import json
-import requests
 from http.server import BaseHTTPRequestHandler
 import mimetypes
 from app.models.formualario_cliente import FormularioCliente
@@ -753,5 +752,6 @@ class APIRouter(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
+
 
 
